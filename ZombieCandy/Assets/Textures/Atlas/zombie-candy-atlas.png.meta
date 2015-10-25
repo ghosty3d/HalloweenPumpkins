@@ -1,0 +1,89 @@
+fileFormatVersion: 2
+guid: 5eb185ba23ba34dbea4fcbfcff3e2fc5
+timeCreated: 1445377546
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: zombie-candy-atlas-muffin
+    21300002: zombie-candy-atlas-gingerbeard-man
+    21300004: zombie-candy-atlas-ice-cream
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: -1
+    mipBias: -1
+    wrapMode: -1
+  nPOTScale: 1
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 5
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: zombie-candy-atlas-muffin
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 701
+        width: 320
+        height: 321
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: zombie-candy-atlas-gingerbeard-man
+      rect:
+        serializedVersion: 2
+        x: 324
+        y: 629
+        width: 293
+        height: 393
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: zombie-candy-atlas-ice-cream
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 328
+        width: 303
+        height: 371
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: zombie-candy
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
