@@ -22,7 +22,7 @@ public class LevelSelectionState : IGameState
 
 	public void ToLevelStartState ()
 	{
-		Debug.Log("Started Level");
+		Debug.Log("[LevelSelectionState] : Started Level");
 		gameManager.GameViewUI.HideMainMenuContainer();
 		gameManager.GameViewUI.HideLevelSelectionContainer();
 
@@ -31,6 +31,8 @@ public class LevelSelectionState : IGameState
 		gameManager.enemiesSpawner.SetLeveTimer(LevelsManager.Instance.CurrentLevel.LevelTime);
 
 		gameManager.GameViewUI.ShowGameUIContainer();
+
+		gameManager.enemiesSpawner.StartSpawnEnemies ();
 	}
 
 	public void ToLevelWinState ()

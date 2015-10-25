@@ -18,11 +18,15 @@ public class LevelsManager : MonoBehaviour
 
 	public void InitLevels(int count)
 	{
+		//Test code, here should be some kind of data from JSON or other config
 		for(int i = 0; i < count; i++)
 		{
-			Level newLevel = new Level(i + 1, 10, 3 + i, 2 + i, 5 + i);
+			Level newLevel = new Level(i + 1, 10, 3 + i, 2 + i, 5 + i, false);
 			LevelsList.Add(newLevel);
 		}
+
+		//Lock last level
+		LevelsList[LevelsList.Count - 1].isLocked = true;
 	}
 
 	public void SelectLevel(int id)

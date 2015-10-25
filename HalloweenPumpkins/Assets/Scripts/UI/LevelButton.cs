@@ -8,6 +8,7 @@ public class LevelButton : MonoBehaviour
 	public int LevelID;
 	public Text ButtonText;
 	public Button button;
+	public Image lockIcon;
 
 	public UnityAction clickAction;
 

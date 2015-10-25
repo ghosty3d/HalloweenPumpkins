@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
 
 	public bool InPause;
 
+	private int PlayerLives = 3;
+
 	void Awake()
 	{
 		Instance = this;
@@ -40,6 +42,17 @@ public class GameManager : MonoBehaviour
 	{
 		enemiesSpawner = EnemiesSpawner.Instance;
 		GoToMainMenu();
+	}
+
+	public void AjustPlayerLives(int value)
+	{
+		PlayerLives += value;
+		GameUI.Instance.UpdatePlayerLives(PlayerLives);
+
+		if (PlayerLives == 0)
+		{
+			GoToLoseState ();
+		}
 	}
 
 	public void GoToMainMenu()

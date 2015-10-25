@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class LevelSelectionUI : MonoBehaviour
@@ -29,6 +30,17 @@ public class LevelSelectionUI : MonoBehaviour
 				newLvlButton.transform.SetParent(Grid.transform);
 				newLvlButton.transform.localScale = Vector3.one;
 				newLvlButton.GetComponent<LevelButton>().LevelID = LevelsManager.Instance.LevelsList[i].ID;
+
+				if (LevelsManager.Instance.LevelsList [i].isLocked)
+				{
+					newLvlButton.GetComponent<LevelButton> ().lockIcon.enabled = true;
+					newLvlButton.GetComponent<Button> ().interactable = false;
+				}
+				else
+				{
+					newLvlButton.GetComponent<LevelButton> ().lockIcon.enabled = false;
+					newLvlButton.GetComponent<Button> ().interactable = true;
+				}
 			}
 		}
 	}

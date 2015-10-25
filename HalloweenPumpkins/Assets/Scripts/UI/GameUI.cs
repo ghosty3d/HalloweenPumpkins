@@ -10,8 +10,10 @@ public class GameUI : MonoBehaviour
 	public GameObject LevelSelectionContainer;
 	public GameObject GameUIContainer;
 	public GameObject PauseContainer;
+	public GameObject EndLevelContainer;
 
 	public Text TimerText;
+	public Text PlayerLivesText;
 
 	void Awake()
 	{
@@ -73,5 +75,30 @@ public class GameUI : MonoBehaviour
 	public void HidePauseContainer()
 	{
 		PauseContainer.SetActive(false);
+	}
+
+	//End Level
+	public void ShowEndLevelContainer(bool isWin)
+	{
+		EndLevelContainer.SetActive(true);
+		if (isWin)
+		{
+			LevelEndUI.Instance.Title.text = "You won this level!";	
+		}
+		else 
+		{
+			LevelEndUI.Instance.Title.text = "You lose this level!";	
+		}
+	}
+
+	public void HideEndLevelContainer()
+	{
+		EndLevelContainer.SetActive(false);
+	}
+
+	public void UpdatePlayerLives(int value)
+	{
+		value = Mathf.Clamp (value, 0, value);
+		PlayerLivesText.text = "Lives: " + value.ToString();
 	}
 }

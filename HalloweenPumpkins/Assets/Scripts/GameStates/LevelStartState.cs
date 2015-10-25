@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PauseState : IGameState
+public class LevelStartState : IGameState
 {
 	public GameManager gameManager;
 	
-	public PauseState(GameManager manager)
+	public LevelStartState(GameManager manager)
 	{
 		gameManager = manager;
 	}
@@ -15,10 +15,11 @@ public class PauseState : IGameState
 		GameManager.Instance.GameViewUI.HidePauseContainer();
 		GameManager.Instance.GameViewUI.HideGameUIContainer();
 		GameManager.Instance.GameViewUI.HideLevelSelectionContainer();
+		GameManager.Instance.GameViewUI.HideEndLevelContainer();
 
 		GameManager.Instance.GameViewUI.ShowMainMenuContainer();
 
-		EnemiesSpawner.Instance.StopEnemies();
+		EnemiesSpawner.Instance.StopEnemiesAndHide();
 
 		Time.timeScale = 1f;
 	}
@@ -35,28 +36,32 @@ public class PauseState : IGameState
 
 	public void ToLevelWinState ()
 	{
-		throw new System.NotImplementedException ();
+		Debug.Log("[LevelStartState] : You won this level!");
+		gameManager.enemiesSpawner.StopEnemies();
+		GameUI.Instance.ShowEndLevelContainer (true);
 	}
 
 	public void ToLevelLoseState ()
 	{
-		throw new System.NotImplementedException ();
+		Debug.Log("[LevelStartState] : You lose this level!");
+		gameManager.enemiesSpawner.StopEnemies();
+		GameUI.Instance.ShowEndLevelContainer (false);
 	}
 
 	public void ToPauseState ()
 	{
-		Debug.Log("I am already in Pause");
+		Debug.Log("[LevelStartState] : Let's pause game!");
+		Time.timeScale = 0f;
+		gameManager.GameViewUI.ShowPauseContainer();
 	}
 
 	public void ToResumeState ()
 	{
-		GameManager.Instance.GameViewUI.HidePauseContainer();
-		Time.timeScale = 1f;
+		throw new System.NotImplementedException ();
 	}
 
 	public void ToExitState()
 	{
-		Debug.Log("Exit from app");
 		Application.Quit();
 	}
 }

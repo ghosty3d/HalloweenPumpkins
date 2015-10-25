@@ -17,6 +17,8 @@ public class EnemiesSpawner : MonoBehaviour
 	public int LevelTimer = 60;
 
 	private GameObject newEnenmy;
+	[SerializeField]
+	private bool spawnMore = true;
 
 	void Awake()
 	{
@@ -26,8 +28,7 @@ public class EnemiesSpawner : MonoBehaviour
 	void Start ()
 	{
 		SpawnEnemies(EnemiesInWave);
-		StartCoroutine(SpawnNewEnemy());
-		StartCoroutine(StartTimer());
+		StartSpawnEnemies();
 	}
 
 	public void SetEnemiesCount(int enemiesCount)
@@ -45,6 +46,13 @@ public class EnemiesSpawner : MonoBehaviour
 		LevelTimer = timer;
 	}
 
+	public void StartSpawnEnemies()
+	{
+		spawnMore = true;
+		StartCoroutine(SpawnNewEnemy());
+		StartCoroutine(StartTimer());
+	}
+
 	IEnumerator StartTimer()
 	{
 		while(LevelTimer > 0)
@@ -59,7 +67,7 @@ public class EnemiesSpawner : MonoBehaviour
 
 	IEnumerator SpawnNewEnemy()
 	{
-		while(true)
+		while(spawnMore)
 		{
 			if(WavesCount > 0)
 			{
@@ -105,12 +113,26 @@ public class EnemiesSpawner : MonoBehaviour
 
 	public void StopEnemies()
 	{
-		WavesCount = 0;
-		EnemiesInWave = 0;
+		//WavesCount = 0;
+		//EnemiesInWave = 0;
+		spawnMore = false;
+	}
 
-		for(int i = 0; i < EnemiesPool.Count; i++)
+	public void StopEnemiesAndHide()
+	{
+		//WavesCount = 0;
+		//EnemiesInWave = 0;
+		spawnMore = false;
+
+		StopCoroutine (SpawnNewEnemy ());
+		StopCoroutine (StartTimer ());
+
+		for (int i = 0; i < EnemiesPool.Count; i++) 
 		{
-			EnemiesPool[i].gameObject.SetActive(false);
+			if (EnemiesPool [i].activeInHierarchy)
+			{
+				EnemiesPool [i].SetActive (false);
+			}		
 		}
 	}
 }

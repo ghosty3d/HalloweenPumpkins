@@ -75,9 +75,9 @@ public class Enemy : MonoBehaviour
 	void OnMouseDown()
 	{
 		Debug.Log("Click: " + transform.name);
+		clicked = true;
 		ParticlesManager.Instance.PlaceAndPlayParticles(transform.position, EnemyColor);
 		gameObject.SetActive(false);
-		clicked = true;
 	}
 
 	void ChangeEnemyType()
@@ -133,7 +133,7 @@ public class Enemy : MonoBehaviour
 			}
 			else
 			{
-				return;
+				gameObject.SetActive(false);
 			}
 		}
 		else
@@ -141,9 +141,8 @@ public class Enemy : MonoBehaviour
 			if(!clicked)
 			{
 				Debug.Log("You missed one life!");
+				GameManager.Instance.AjustPlayerLives (-1);
 			}
 		}
-
-		gameObject.SetActive(false);
 	}
 }
