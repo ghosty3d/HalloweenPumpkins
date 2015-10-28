@@ -28,24 +28,29 @@ public class EnemiesSpawner : MonoBehaviour
 	void Start ()
 	{
 		SpawnEnemies(EnemiesInWave);
-		StartSpawnEnemies();
 	}
 
+	//Set Enemies count in Enemies Wave
 	public void SetEnemiesCount(int enemiesCount)
 	{
 		EnemiesInWave = enemiesCount;
 	}
 
+	//Set Total Waves Count in selected Level
 	public void SetWavesCount(int wavesCount)
 	{
 		WavesCount = wavesCount;
 	}
 
+	//Set Level Timer
 	public void SetLeveTimer(int timer)
 	{
 		LevelTimer = timer;
 	}
 
+	/// <summary>
+	/// Starts the spawn enemies. Can be used form the outside.
+	/// </summary>
 	public void StartSpawnEnemies()
 	{
 		spawnMore = true;
@@ -57,14 +62,19 @@ public class EnemiesSpawner : MonoBehaviour
 	{
 		while(LevelTimer > 0)
 		{
-			yield return new WaitForSeconds(1f);
 			LevelTimer--;
+			Debug.Log ("Timer");
 			GameManager.Instance.GameViewUI.SetTimer(LevelTimer);
+			yield return new WaitForSeconds(1f);
 		}
 
-		GameManager.Instance.currentGameState.ToLevelWinState();
+		GameManager.Instance.GoToWonState();
 	}
 
+	/// <summary>
+	/// Coroutine spawns the new enemies wave.
+	/// </summary>
+	/// <returns>The new enemy.</returns>
 	IEnumerator SpawnNewEnemy()
 	{
 		while(spawnMore)
@@ -88,6 +98,7 @@ public class EnemiesSpawner : MonoBehaviour
 				
 				yield return new WaitForSeconds(EnemiesInWave * EnemySpawnTimer + 2f);
 				WavesCount--;
+				GameManager.Instance.GameViewUI.UpdateEnemiesWaves (WavesCount);
 				SetEnemiesCount(Random.Range(4, 9));
 			}
 			else
@@ -97,35 +108,45 @@ public class EnemiesSpawner : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Spawns the enemies. And add them to Enemies ObjectPool.
+	/// </summary>
+	/// <param name="count">Count of enemies in ObjectPool.</param>
 	public void SpawnEnemies(int count)
 	{
-		if(EnenmyPrefab && count > 0)
+		if (EnenmyPrefab && count > 0)
 		{
-			for(int i = 0; i < count; i++)
+			for (int i = 0; i < count; i++)
 			{
-				newEnenmy = Instantiate(EnenmyPrefab);
-				newEnenmy.SetActive(false);
+				newEnenmy = Instantiate (EnenmyPrefab);
+				newEnenmy.SetActive (false);
 				newEnenmy.name = EnenmyPrefab.name + "-" + (i + 1);
-				EnemiesPool.Add(newEnenmy);
+				EnemiesPool.Add (newEnenmy);
 			}
+		}
+		else
+		{
+			Debug.LogWarning ("EnenmyPrefab is not set properly!");
 		}
 	}
 
+	/// <summary>
+	/// Stops spawn enemies, but don't hide them
+	/// </summary>
 	public void StopEnemies()
 	{
-		//WavesCount = 0;
-		//EnemiesInWave = 0;
 		spawnMore = false;
+		StopAllCoroutines ();
 	}
 
+	/// <summary>
+	/// Stops spawn enemies and and hide them immediately.
+	/// </summary>
 	public void StopEnemiesAndHide()
 	{
-		//WavesCount = 0;
-		//EnemiesInWave = 0;
 		spawnMore = false;
 
-		StopCoroutine (SpawnNewEnemy ());
-		StopCoroutine (StartTimer ());
+		StopAllCoroutines ();
 
 		for (int i = 0; i < EnemiesPool.Count; i++) 
 		{

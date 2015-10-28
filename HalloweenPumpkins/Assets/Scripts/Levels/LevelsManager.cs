@@ -21,7 +21,7 @@ public class LevelsManager : MonoBehaviour
 		//Test code, here should be some kind of data from JSON or other config
 		for(int i = 0; i < count; i++)
 		{
-			Level newLevel = new Level(i + 1, 10, 3 + i, 2 + i, 5 + i, false);
+			Level newLevel = new Level(i + 1, 25, 3 + i, 2 + i, 5 + i, false);
 			LevelsList.Add(newLevel);
 		}
 

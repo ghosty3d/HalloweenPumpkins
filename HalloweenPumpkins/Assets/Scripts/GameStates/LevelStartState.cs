@@ -38,6 +38,7 @@ public class LevelStartState : IGameState
 	{
 		Debug.Log("[LevelStartState] : You won this level!");
 		gameManager.enemiesSpawner.StopEnemies();
+		gameManager.GameViewUI.HideBombContainer ();
 		GameUI.Instance.ShowEndLevelContainer (true);
 	}
 
@@ -45,6 +46,7 @@ public class LevelStartState : IGameState
 	{
 		Debug.Log("[LevelStartState] : You lose this level!");
 		gameManager.enemiesSpawner.StopEnemies();
+		gameManager.GameViewUI.HideBombContainer ();
 		GameUI.Instance.ShowEndLevelContainer (false);
 	}
 

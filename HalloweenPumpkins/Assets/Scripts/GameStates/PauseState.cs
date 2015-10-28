@@ -15,12 +15,15 @@ public class PauseState : IGameState
 		GameManager.Instance.GameViewUI.HidePauseContainer();
 		GameManager.Instance.GameViewUI.HideGameUIContainer();
 		GameManager.Instance.GameViewUI.HideLevelSelectionContainer();
+		GameManager.Instance.GameViewUI.HideBombContainer();
 
 		GameManager.Instance.GameViewUI.ShowMainMenuContainer();
 
 		EnemiesSpawner.Instance.StopEnemiesAndHide();
 
 		Time.timeScale = 1f;
+
+		gameManager.GameViewUI.GetComponent<Canvas> ().renderMode = RenderMode.ScreenSpaceOverlay;
 	}
 
 	public void ToLevelSelectionState ()

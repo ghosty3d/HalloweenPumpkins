@@ -18,12 +18,15 @@ public class GameManager : MonoBehaviour
 	public LevelSelectionState levelSelectionState;
 	public LevelStartState levelStartState;
 	public LevelLoseState levelLoseState;
+	public LevelWonState levelWonState;
 
 	public PauseState pauseState;
 
 	public bool InPause;
 
-	private int PlayerLives = 3;
+	public int PlayerLivesMax = 3;
+	public int PlayerLives = 3;
+	public int PlayerBombsCount = 3;
 
 	void Awake()
 	{
@@ -32,6 +35,7 @@ public class GameManager : MonoBehaviour
 		levelSelectionState = new LevelSelectionState(this);
 		levelStartState = new LevelStartState(this);
 		levelLoseState = new LevelLoseState(this);
+		levelWonState = new LevelWonState(this);
 
 		pauseState = new PauseState(this);
 
@@ -42,6 +46,11 @@ public class GameManager : MonoBehaviour
 	{
 		enemiesSpawner = EnemiesSpawner.Instance;
 		GoToMainMenu();
+	}
+
+	void Update()
+	{
+		Debug.Log (currentGameState.GetType());
 	}
 
 	public void AjustPlayerLives(int value)
@@ -93,5 +102,12 @@ public class GameManager : MonoBehaviour
 	public void GoToLoseState()
 	{
 		currentGameState.ToLevelLoseState();
+		currentGameState = levelLoseState;
+	}
+
+	public void GoToWonState()
+	{
+		currentGameState.ToLevelWinState();
+		currentGameState = levelWonState;
 	}
 }

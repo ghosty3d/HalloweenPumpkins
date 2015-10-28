@@ -12,7 +12,18 @@ public class LevelLoseState : IGameState
 
 	public void ToMainMenuState ()
 	{
-		throw new System.NotImplementedException ();
+		GameManager.Instance.GameViewUI.HidePauseContainer();
+		GameManager.Instance.GameViewUI.HideGameUIContainer();
+		GameManager.Instance.GameViewUI.HideLevelSelectionContainer();
+		GameManager.Instance.GameViewUI.HideEndLevelContainer();
+
+		GameManager.Instance.GameViewUI.ShowMainMenuContainer();
+
+		EnemiesSpawner.Instance.StopEnemiesAndHide();
+
+		Time.timeScale = 1f;
+
+		gameManager.GameViewUI.GetComponent<Canvas> ().renderMode = RenderMode.ScreenSpaceOverlay;
 	}
 
 	public void ToLevelSelectionState ()
@@ -22,7 +33,19 @@ public class LevelLoseState : IGameState
 
 	public void ToLevelStartState ()
 	{
-		throw new System.NotImplementedException ();
+		Debug.Log("[LevelLoseState] : Restarted Level");
+		gameManager.GameViewUI.HideEndLevelContainer();
+
+		gameManager.enemiesSpawner.StopEnemiesAndHide ();
+		gameManager.enemiesSpawner.SetEnemiesCount(LevelsManager.Instance.CurrentLevel.MaxEnemyCount);
+		gameManager.enemiesSpawner.SetWavesCount(LevelsManager.Instance.CurrentLevel.WavesCount);
+		gameManager.enemiesSpawner.SetLeveTimer(LevelsManager.Instance.CurrentLevel.LevelTime);
+
+		gameManager.AjustPlayerLives (gameManager.PlayerLivesMax - gameManager.PlayerLives);
+		gameManager.enemiesSpawner.StartSpawnEnemies ();
+
+		BombManger.SetStartBombsCount (gameManager.PlayerBombsCount);
+		gameManager.GameViewUI.ShowBombContainer ();
 	}
 
 	public void ToLevelWinState ()
@@ -32,7 +55,7 @@ public class LevelLoseState : IGameState
 
 	public void ToLevelLoseState ()
 	{
-		throw new System.NotImplementedException ();
+		Debug.Log ("I am already in LoseState");
 	}
 
 	public void ToPauseState ()

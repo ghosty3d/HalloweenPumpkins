@@ -32,7 +32,7 @@ public class Enemy : MonoBehaviour
 	private MeshRenderer enemyMeshRenderer;
 	public float spawnedX;
 
-	private bool clicked = false;
+	public bool Clicked = false;
 
 	void Awake()
 	{
@@ -45,7 +45,7 @@ public class Enemy : MonoBehaviour
 	void OnEnable()
 	{
 		currentSate = runSate;
-
+		Clicked = false;
 		SlideSpeed = Random.Range(0.25f, 2f);
 		//MoveSpeed = Random.Range(0.75f, 1f);
 
@@ -75,7 +75,7 @@ public class Enemy : MonoBehaviour
 	void OnMouseDown()
 	{
 		Debug.Log("Click: " + transform.name);
-		clicked = true;
+		Clicked = true;
 		ParticlesManager.Instance.PlaceAndPlayParticles(transform.position, EnemyColor);
 		gameObject.SetActive(false);
 	}
@@ -126,7 +126,7 @@ public class Enemy : MonoBehaviour
 	{
 		if(CurrentEnemyType == EnemiesTypes.Gingerbeardman)
 		{
-			if(clicked)
+			if(Clicked)
 			{
 				Debug.Log("You clicker wrong guy!");
 				GameManager.Instance.GoToLoseState();
@@ -138,11 +138,12 @@ public class Enemy : MonoBehaviour
 		}
 		else
 		{
-			if(!clicked)
-			{
-				Debug.Log("You missed one life!");
+			if (!Clicked && (GameManager.Instance.currentGameState != GameManager.Instance.levelLoseState && GameManager.Instance.currentGameState != GameManager.Instance.levelWonState)) {
+				Debug.Log ("You missed one life!");
 				GameManager.Instance.AjustPlayerLives (-1);
 			}
+
+			gameObject.SetActive (false);
 		}
 	}
 }

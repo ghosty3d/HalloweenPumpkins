@@ -6,14 +6,18 @@ public class GameUI : MonoBehaviour
 {
 	public static GameUI Instance;
 
+	//Containers
 	public GameObject MainMenuContainer;
 	public GameObject LevelSelectionContainer;
 	public GameObject GameUIContainer;
 	public GameObject PauseContainer;
 	public GameObject EndLevelContainer;
+	public GameObject BombContainer;
 
 	public Text TimerText;
 	public Text PlayerLivesText;
+	public Text EnemiesWavesText;
+	public Text BombsCountText;
 
 	void Awake()
 	{
@@ -23,7 +27,9 @@ public class GameUI : MonoBehaviour
 	//SetTimer
 	public void SetTimer(int seconds)
 	{
-		if(seconds > 10)
+		seconds = Mathf.Clamp (seconds, 0, seconds);
+
+		if(seconds > 9)
 		{
 			TimerText.text = "0:" + seconds.ToString();
 		}
@@ -96,9 +102,31 @@ public class GameUI : MonoBehaviour
 		EndLevelContainer.SetActive(false);
 	}
 
+	//Bombs
+	public void ShowBombContainer()
+	{
+		BombContainer.SetActive (true);
+	}
+
+	public void HideBombContainer()
+	{
+		BombContainer.SetActive (false);
+	}
+
 	public void UpdatePlayerLives(int value)
 	{
 		value = Mathf.Clamp (value, 0, value);
 		PlayerLivesText.text = "Lives: " + value.ToString();
 	}
+
+	public void UpdateEnemiesWaves(int waves)
+	{
+		EnemiesWavesText.text = "Enemies Waves: " + waves.ToString();
+	}
+
+	public void UpdateBombsCount(int count)
+	{
+		BombsCountText.text = count.ToString();
+	}
+
 }

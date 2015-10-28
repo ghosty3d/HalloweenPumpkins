@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+[System.Serializable]
 public class MainMenuState : IGameState
 {
 	public GameManager gameManager;
@@ -13,9 +13,20 @@ public class MainMenuState : IGameState
 	public void ToMainMenuState ()
 	{
 		Debug.Log("I am already in Main Menu");
+
 		if(!gameManager.GameViewUI.MainMenuContainer.gameObject.activeInHierarchy)
 		{
 			gameManager.GameViewUI.ShowMainMenuContainer();
+		}
+
+		if(gameManager.GameViewUI.GameUIContainer.activeInHierarchy)
+		{
+			gameManager.GameViewUI.HideGameUIContainer ();
+		}
+
+		if(gameManager.GameViewUI.BombContainer.activeInHierarchy)
+		{
+			gameManager.GameViewUI.HideBombContainer ();
 		}
 	}
 

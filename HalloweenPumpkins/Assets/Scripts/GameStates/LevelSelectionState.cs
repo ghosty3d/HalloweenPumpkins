@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class LevelSelectionState : IGameState
@@ -30,9 +31,18 @@ public class LevelSelectionState : IGameState
 		gameManager.enemiesSpawner.SetWavesCount(LevelsManager.Instance.CurrentLevel.WavesCount);
 		gameManager.enemiesSpawner.SetLeveTimer(LevelsManager.Instance.CurrentLevel.LevelTime);
 
+		gameManager.AjustPlayerLives (gameManager.PlayerLivesMax - gameManager.PlayerLives);
+
 		gameManager.GameViewUI.ShowGameUIContainer();
+		gameManager.GameViewUI.ShowBombContainer();
+		gameManager.GameViewUI.UpdateEnemiesWaves (LevelsManager.Instance.CurrentLevel.WavesCount);
 
 		gameManager.enemiesSpawner.StartSpawnEnemies ();
+
+		gameManager.GameViewUI.GetComponent<Canvas> ().renderMode = RenderMode.ScreenSpaceCamera;
+		gameManager.GameViewUI.GetComponent<Canvas> ().worldCamera = Camera.main;
+
+		BombManger.SetStartBombsCount (gameManager.PlayerBombsCount);
 	}
 
 	public void ToLevelWinState ()
