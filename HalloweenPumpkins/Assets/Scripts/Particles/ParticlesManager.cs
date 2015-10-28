@@ -6,9 +6,15 @@ public class ParticlesManager : MonoBehaviour
 	public static ParticlesManager Instance;
 
 	public GameObject ParticlesPrefab;
+	public GameObject BombParticlesPrefab;
+	public GameObject VortexParticlesPrefab;
 
 	private GameObject particlesObject;
+	private GameObject bombParticlesObject;
+
+	//
 	private ParticleSystem particles;
+	private ParticleSystem bombParticles;
 
 	void Awake()
 	{
@@ -22,6 +28,9 @@ public class ParticlesManager : MonoBehaviour
 
 	public void CreateParticles()
 	{
+		bombParticlesObject = Instantiate(BombParticlesPrefab, Vector3.zero, Quaternion.identity) as GameObject;
+		bombParticles = bombParticlesObject.GetComponent<ParticleSystem>();
+
 		particlesObject = Instantiate(ParticlesPrefab, Vector3.zero, Quaternion.identity) as GameObject;
 		particles = particlesObject.GetComponent<ParticleSystem>();
 	}
@@ -33,6 +42,14 @@ public class ParticlesManager : MonoBehaviour
 
 		particles.startColor = particlesColor;
 		particles.Play();
+
+	}
+
+	public void PlaceBombParticles(Vector3 position)
+	{
+		bombParticlesObject.transform.position = position;
+		bombParticlesObject.SetActive(true);
+		bombParticles.Play();
 
 	}
 }
