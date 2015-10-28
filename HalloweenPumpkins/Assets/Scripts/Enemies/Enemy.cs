@@ -74,10 +74,16 @@ public class Enemy : MonoBehaviour
 
 	void OnMouseDown()
 	{
-		Debug.Log("Click: " + transform.name);
-		Clicked = true;
-		ParticlesManager.Instance.PlaceAndPlayParticles(transform.position, EnemyColor);
-		gameObject.SetActive(false);
+		if (GameManager.Instance.currentGameState == GameManager.Instance.levelStartState) {
+			Debug.Log ("Click: " + transform.name);
+			Clicked = true;
+			ParticlesManager.Instance.PlaceAndPlayParticles (transform.position, EnemyColor);
+			gameObject.SetActive (false);	
+		}
+		else
+		{
+			return;
+		}
 	}
 
 	void ChangeEnemyType()

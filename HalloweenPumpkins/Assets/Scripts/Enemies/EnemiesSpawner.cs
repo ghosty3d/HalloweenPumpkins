@@ -96,7 +96,7 @@ public class EnemiesSpawner : MonoBehaviour
 					}
 				}
 				
-				yield return new WaitForSeconds(EnemiesInWave * EnemySpawnTimer + 2f);
+				yield return new WaitForSeconds(LevelTimer / (WavesCount + 1));
 				WavesCount--;
 				GameManager.Instance.GameViewUI.UpdateEnemiesWaves (WavesCount);
 				SetEnemiesCount(Random.Range(4, 9));
