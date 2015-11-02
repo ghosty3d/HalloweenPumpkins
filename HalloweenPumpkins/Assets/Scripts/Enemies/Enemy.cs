@@ -17,9 +17,9 @@ public class Enemy : MonoBehaviour
 
 	public enum EnemiesTypes
 	{
-		Mafin,
-		IceCream,
-		Gingerbeardman
+		Pumpkin,
+		PumpkinTall,
+		Ghost
 	}
 
 	public EnemiesTypes CurrentEnemyType;
@@ -27,9 +27,11 @@ public class Enemy : MonoBehaviour
 	public float UntouchableChanse;
 
 	public Color EnemyColor;
-	public List<Texture2D> EnemiesTexturesList = new List<Texture2D>();
+	public List<EnemyData> EnemiesVisualList = new List<EnemyData>();
 
+	private MeshFilter enemyMeshFilter;
 	private MeshRenderer enemyMeshRenderer;
+
 	public float spawnedX;
 
 	public bool Clicked = false;
@@ -37,6 +39,7 @@ public class Enemy : MonoBehaviour
 	void Awake()
 	{
 		enemyTransform = transform;
+		enemyMeshFilter = GetComponent<MeshFilter> ();
 		enemyMeshRenderer = GetComponent<MeshRenderer>();
 
 		runSate = new EnemyRunState(this);
@@ -74,7 +77,7 @@ public class Enemy : MonoBehaviour
 
 	void OnMouseDown()
 	{
-		if (GameManager.Instance.currentGameState == GameManager.Instance.levelStartState) {
+		if (GameStatesManager.Instance.currentGameState == GameStatesManager.Instance.levelGameState) {
 			Debug.Log ("Click: " + transform.name);
 			Clicked = true;
 			ParticlesManager.Instance.PlaceAndPlayParticles (transform.position, EnemyColor);
@@ -92,37 +95,50 @@ public class Enemy : MonoBehaviour
 
 		if(chanse > 95f && chanse < 100f)
 		{
-			CurrentEnemyType = EnemiesTypes.Gingerbeardman;
+			CurrentEnemyType = EnemiesTypes.Ghost;
 		}
 		else if(chanse > 66f && chanse < 95f)
 		{
-			CurrentEnemyType = EnemiesTypes.IceCream;
+			CurrentEnemyType = EnemiesTypes.PumpkinTall;
 		}
 		else
 		{
-			CurrentEnemyType = EnemiesTypes.Mafin;
+			CurrentEnemyType = EnemiesTypes.Pumpkin;
 		}
 
 
 		switch(CurrentEnemyType)
 		{
-			case EnemiesTypes.Mafin:
-				enemyMeshRenderer.material.SetTexture("_MainTex", EnemiesTexturesList[0]);
+				case EnemiesTypes.Pumpkin:
+				
+				enemyMeshFilter.mesh = EnemiesVisualList [0].EnemyMesh;
+				enemyMeshRenderer.material = EnemiesVisualList [0].EnemyMaterial;
+				enemyMeshRenderer.material.SetTexture("_MainTex", EnemiesVisualList[0].EnemyTexture);
+
 				EnemyColor = new Color(1f, 0.5f, 0.25f);
 			break;
 
-			case EnemiesTypes.IceCream:
-				enemyMeshRenderer.material.SetTexture("_MainTex", EnemiesTexturesList[1]);
-				EnemyColor = new Color((139f / 255f), (198f / 255f), (73f / 255f));
+			case EnemiesTypes.PumpkinTall:
+
+				enemyMeshFilter.mesh = EnemiesVisualList [1].EnemyMesh;
+				enemyMeshRenderer.material = EnemiesVisualList [1].EnemyMaterial;
+				enemyMeshRenderer.material.SetTexture("_MainTex", EnemiesVisualList[1].EnemyTexture);
+
+				EnemyColor = new Color(1f, 0.5f, 0.25f);
 			break;
 
-			case EnemiesTypes.Gingerbeardman:
-				enemyMeshRenderer.material.SetTexture("_MainTex", EnemiesTexturesList[2]);
-				EnemyColor = new Color((234f / 255f), (74f / 255f), (52f / 255f));
+			case EnemiesTypes.Ghost:
+				enemyMeshFilter.mesh = EnemiesVisualList [2].EnemyMesh;
+				enemyMeshRenderer.material = EnemiesVisualList [2].EnemyMaterial;
+				enemyMeshRenderer.material.SetTexture("_MainTex", EnemiesVisualList[2].EnemyTexture);
 			break;
 
 			default:
-				enemyMeshRenderer.material.SetTexture("_MainTex", EnemiesTexturesList[0]);
+
+				enemyMeshFilter.mesh = EnemiesVisualList [0].EnemyMesh;
+				enemyMeshRenderer.material = EnemiesVisualList [0].EnemyMaterial;
+				enemyMeshRenderer.material.SetTexture("_MainTex", EnemiesVisualList[0].EnemyTexture);
+
 				EnemyColor = new Color(1f, 0.5f, 0.25f);
 			break;
 		}
@@ -130,12 +146,12 @@ public class Enemy : MonoBehaviour
 
 	void OnBecameInvisible()
 	{
-		if(CurrentEnemyType == EnemiesTypes.Gingerbeardman)
+		if(CurrentEnemyType == EnemiesTypes.Ghost)
 		{
 			if(Clicked)
 			{
 				Debug.Log("You clicker wrong guy!");
-				GameManager.Instance.GoToLoseState();
+				GameStatesManager.Instance.GoToLoseState();
 			}
 			else
 			{
@@ -144,9 +160,9 @@ public class Enemy : MonoBehaviour
 		}
 		else
 		{
-			if (!Clicked && (GameManager.Instance.currentGameState != GameManager.Instance.levelLoseState && GameManager.Instance.currentGameState != GameManager.Instance.levelWonState)) {
+			if (!Clicked && (GameStatesManager.Instance.currentGameState != GameStatesManager.Instance.levelLoseState && GameStatesManager.Instance.currentGameState != GameStatesManager.Instance.levelWonState)) {
 				Debug.Log ("You missed one life!");
-				GameManager.Instance.AjustPlayerLives (-1);
+				GameStatesManager.Instance.AjustPlayerLives (-1);
 			}
 
 			gameObject.SetActive (false);

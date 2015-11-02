@@ -6,6 +6,7 @@ public class LevelsManager : MonoBehaviour
 {
 	public static LevelsManager Instance;
 
+	public int LevelsCout;
 	public List<Level> LevelsList = new List<Level>();
 
 	public Level CurrentLevel;
@@ -13,7 +14,7 @@ public class LevelsManager : MonoBehaviour
 	void Awake()
 	{
 		Instance = this;
-		InitLevels(5);
+		InitLevels(LevelsCout);
 	}
 
 	public void InitLevels(int count)
@@ -21,7 +22,7 @@ public class LevelsManager : MonoBehaviour
 		//Test code, here should be some kind of data from JSON or other config
 		for(int i = 0; i < count; i++)
 		{
-			Level newLevel = new Level(i + 1, 25, 3 + i, 2 + i, 5 + i, false);
+			Level newLevel = new Level(i + 1, 25, 3 + i, 2 + i, 5 + i, false, 0);
 			LevelsList.Add(newLevel);
 		}
 

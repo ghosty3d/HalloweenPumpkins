@@ -10,21 +10,16 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
 	public void OnBeginDrag (PointerEventData eventData)
 	{
-		Debug.Log ("OnBeginDrag");
 		startPos = transform.position;
 	}
 
 	public void OnDrag (PointerEventData eventData)
 	{
-		Debug.Log ("OnDrag");
-		Debug.Log (eventData.position);
 		this.transform.position = eventData.position;
 	}
 
 	public void OnEndDrag (PointerEventData eventData)
 	{
-		Debug.Log ("OnEndDrag");
-
 		if (BombManger.BombsCount > 0)
 		{
 			transform.position = startPos;
@@ -38,7 +33,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
 			if(BombManger.BombsCount == 0)
 			{
-				GameManager.Instance.GameViewUI.HideBombContainer ();
+				GameStatesManager.Instance.GameViewUI.HideBombContainer ();
 			}
 		} 
 	}

@@ -13,7 +13,9 @@ public class Level
 
 	public bool isLocked;
 
-	public Level(int id, int levelTime, int wavesCount, int minEnemyCount, int maxEnemyCount, bool locked)
+	public int Stars;
+
+	public Level(int id, int levelTime, int wavesCount, int minEnemyCount, int maxEnemyCount, bool locked, int stars)
 	{
 		ID = id;
 		LevelTime = levelTime;
@@ -21,5 +23,6 @@ public class Level
 		MinEnemyCount = minEnemyCount;
 		MaxEnemyCount = maxEnemyCount;
 		isLocked = locked;
+		Stars = stars;
 	}
 }

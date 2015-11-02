@@ -3,73 +3,98 @@ using System.Collections;
 
 public class LevelWonState : IGameState
 {
-	public GameManager gameManager;
+	public GameStatesManager gameManager;
 
-	public LevelWonState(GameManager manager)
+	public LevelWonState(GameStatesManager manager)
 	{
 		gameManager = manager;
 	}
 
-	public void ToMainMenuState ()
+	public void EnableState ()
 	{
-		GameManager.Instance.GameViewUI.HidePauseContainer();
-		GameManager.Instance.GameViewUI.HideGameUIContainer();
-		GameManager.Instance.GameViewUI.HideLevelSelectionContainer();
-		GameManager.Instance.GameViewUI.HideEndLevelContainer();
+		if(!gameManager.GameViewUI.EndLevelContainer.activeInHierarchy)
+		{
+			gameManager.GameViewUI.ShowEndLevelContainer (true);
+		}
 
-		GameManager.Instance.GameViewUI.ShowMainMenuContainer();
-
-		EnemiesSpawner.Instance.StopEnemiesAndHide();
-
-		Time.timeScale = 1f;
-
-		gameManager.GameViewUI.GetComponent<Canvas> ().renderMode = RenderMode.ScreenSpaceOverlay;
+		gameManager.GetNewLevelRank ();
+		gameManager.enemiesSpawner.StopEnemiesAndHide ();
 	}
 
-	public void ToLevelSelectionState ()
+	public void UpdateState ()
 	{
-		throw new System.NotImplementedException ();
+		
 	}
 
-	public void ToLevelStartState ()
+	public void DisableState ()
 	{
-		Debug.Log("[LevelWonState] : Restarted Level");
-		gameManager.GameViewUI.HideEndLevelContainer();
+		if(gameManager.GameViewUI.EndLevelContainer.activeInHierarchy)
+		{
+			gameManager.GameViewUI.HideEndLevelContainer ();
+		}
 
 		gameManager.enemiesSpawner.StopEnemiesAndHide ();
-		gameManager.enemiesSpawner.SetEnemiesCount(LevelsManager.Instance.CurrentLevel.MaxEnemyCount);
-		gameManager.enemiesSpawner.SetWavesCount(LevelsManager.Instance.CurrentLevel.WavesCount);
-		gameManager.enemiesSpawner.SetLeveTimer(LevelsManager.Instance.CurrentLevel.LevelTime);
-
-		gameManager.AjustPlayerLives (gameManager.PlayerLivesMax - gameManager.PlayerLives);
-		gameManager.enemiesSpawner.StartSpawnEnemies ();
-
-		BombManger.SetStartBombsCount (gameManager.PlayerBombsCount);
-		gameManager.GameViewUI.ShowBombContainer ();
 	}
 
-	public void ToLevelWinState ()
-	{
-		Debug.Log("I am already in Level Won State!");
-	}
-
-	public void ToLevelLoseState ()
-	{
-		throw new System.NotImplementedException ();
-	}
-
-	public void ToPauseState ()
-	{
-		throw new System.NotImplementedException ();
-	}
-
-	public void ToResumeState ()
-	{
-		throw new System.NotImplementedException ();
-	}
-
-	public void ToExitState ()
-	{
-		Application.Quit ();
-	}
+//	public void ToMainMenuState ()
+//	{
+//		Time.timeScale = 1f;
+//		gameManager.GameViewUI.HidePauseContainer();
+//		gameManager.GameViewUI.HideGameUIContainer();
+//		gameManager.GameViewUI.HideLevelSelectionContainer();
+//		gameManager.GameViewUI.HideEndLevelContainer();
+//
+//		gameManager.GameViewUI.ShowMainMenuContainer();
+//
+//		gameManager.enemiesSpawner.StopEnemiesAndHide();
+//
+//		gameManager.GameViewUI.GetComponent<Canvas> ().renderMode = RenderMode.ScreenSpaceOverlay;
+//	}
+//
+//	public void ToLevelSelectionState ()
+//	{
+//		throw new System.NotImplementedException ();
+//	}
+//
+//	public void ToLevelStartState ()
+//	{
+//		Debug.Log("[LevelWonState] : Restarted Level");
+//		gameManager.GameViewUI.HideEndLevelContainer();
+//
+//		gameManager.enemiesSpawner.StopEnemiesAndHide ();
+//		gameManager.enemiesSpawner.SetEnemiesCount(LevelsManager.Instance.CurrentLevel.MaxEnemyCount);
+//		gameManager.enemiesSpawner.SetWavesCount(LevelsManager.Instance.CurrentLevel.WavesCount);
+//		gameManager.enemiesSpawner.SetLeveTimer(LevelsManager.Instance.CurrentLevel.LevelTime);
+//
+//		gameManager.AjustPlayerLives (gameManager.PlayerLivesMax - gameManager.PlayerLives);
+//		gameManager.enemiesSpawner.StartSpawnEnemies ();
+//
+//		BombManger.SetStartBombsCount (gameManager.PlayerBombsCount);
+//		gameManager.GameViewUI.ShowBombContainer ();
+//	}
+//
+//	public void ToLevelWinState ()
+//	{
+//		Debug.Log("I am already in Level Won State!");
+//	}
+//
+//	public void ToLevelLoseState ()
+//	{
+//		throw new System.NotImplementedException ();
+//	}
+//
+//	public void ToPauseState ()
+//	{
+//		throw new System.NotImplementedException ();
+//	}
+//
+//	public void ToResumeState ()
+//	{
+//		throw new System.NotImplementedException ();
+//	}
+//
+//	public void ToExitState ()
+//	{
+//		Application.Quit ();
+//	}
 }

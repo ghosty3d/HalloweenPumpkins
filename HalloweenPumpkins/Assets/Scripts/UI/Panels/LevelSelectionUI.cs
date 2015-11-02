@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class LevelSelectionUI : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class LevelSelectionUI : MonoBehaviour
 	public GameObject Grid;
 
 	public GameObject LevelButton;
+
+	public List<GameObject> LevelsButtons = new List<GameObject> ();
 
 	void Awake()
 	{
@@ -30,6 +33,7 @@ public class LevelSelectionUI : MonoBehaviour
 				newLvlButton.transform.SetParent(Grid.transform);
 				newLvlButton.transform.localScale = Vector3.one;
 				newLvlButton.GetComponent<LevelButton>().LevelID = LevelsManager.Instance.LevelsList[i].ID;
+				LevelsButtons.Add (newLvlButton);
 
 				if (LevelsManager.Instance.LevelsList [i].isLocked)
 				{

@@ -46,6 +46,26 @@ public class EnemiesSpawner : MonoBehaviour
 	public void SetLeveTimer(int timer)
 	{
 		LevelTimer = timer;
+		GameStatesManager.Instance.GameViewUI.SetTimer (LevelTimer);
+	}
+
+	IEnumerator StartTimer()
+	{
+		while(LevelTimer > 0)
+		{
+			LevelTimer--;
+			Debug.Log ("Timer");
+			GameStatesManager.Instance.GameViewUI.SetTimer(LevelTimer);
+			yield return new WaitForSeconds(1f);
+		}
+
+		GameStatesManager.Instance.GoToWonState();
+	}
+
+	public void StopTimer()
+	{
+		StopCoroutine ("StartTimer");
+		GameStatesManager.Instance.GameViewUI.SetTimer (0);
 	}
 
 	/// <summary>
@@ -56,19 +76,6 @@ public class EnemiesSpawner : MonoBehaviour
 		spawnMore = true;
 		StartCoroutine(SpawnNewEnemy());
 		StartCoroutine(StartTimer());
-	}
-
-	IEnumerator StartTimer()
-	{
-		while(LevelTimer > 0)
-		{
-			LevelTimer--;
-			Debug.Log ("Timer");
-			GameManager.Instance.GameViewUI.SetTimer(LevelTimer);
-			yield return new WaitForSeconds(1f);
-		}
-
-		GameManager.Instance.GoToWonState();
 	}
 
 	/// <summary>
@@ -98,11 +105,12 @@ public class EnemiesSpawner : MonoBehaviour
 				
 				yield return new WaitForSeconds(LevelTimer / (WavesCount + 1));
 				WavesCount--;
-				GameManager.Instance.GameViewUI.UpdateEnemiesWaves (WavesCount);
+				GameStatesManager.Instance.GameViewUI.UpdateEnemiesWaves (WavesCount);
 				SetEnemiesCount(Random.Range(4, 9));
 			}
 			else
 			{
+				GameStatesManager.Instance.GoToWonState ();
 				yield return null;
 			}
 		}
@@ -123,6 +131,10 @@ public class EnemiesSpawner : MonoBehaviour
 				newEnenmy.name = EnenmyPrefab.name + "-" + (i + 1);
 				EnemiesPool.Add (newEnenmy);
 			}
+		}
+		else if (EnemiesInWave <= 0)
+		{
+			Debug.LogWarning ("EnemiesInWave is 0!");
 		}
 		else
 		{

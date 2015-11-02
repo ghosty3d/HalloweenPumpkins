@@ -1,69 +1,97 @@
 ﻿using UnityEngine;
 using System.Collections;
-[System.Serializable]
+
 public class MainMenuState : IGameState
 {
-	public GameManager gameManager;
+	public GameStatesManager gameManager;
 
-	public MainMenuState(GameManager manager)
+	public MainMenuState(GameStatesManager manager)
 	{
 		gameManager = manager;
 	}
 
-	public void ToMainMenuState ()
+	public void EnableState ()
 	{
-		Debug.Log("I am already in Main Menu");
+		Debug.Log ("Now current state is :" + this.GetType());
 
 		if(!gameManager.GameViewUI.MainMenuContainer.gameObject.activeInHierarchy)
 		{
 			gameManager.GameViewUI.ShowMainMenuContainer();
-		}
 
-		if(gameManager.GameViewUI.GameUIContainer.activeInHierarchy)
+			gameManager.GameViewUI.GetComponent<Canvas> ().worldCamera = Camera.main;
+			gameManager.GameViewUI.GetComponent<Canvas> ().renderMode = RenderMode.ScreenSpaceOverlay;
+		}
+	}
+
+	public void UpdateState ()
+	{
+		Debug.Log ("Now current state is :" + this.GetType() + " in Update");
+	}
+
+	public void DisableState ()
+	{
+		if(gameManager.GameViewUI.MainMenuContainer.gameObject.activeInHierarchy)
 		{
-			gameManager.GameViewUI.HideGameUIContainer ();
+			gameManager.GameViewUI.HideMainMenuContainer();
 		}
 
-		if(gameManager.GameViewUI.BombContainer.activeInHierarchy)
+		if (gameManager.GameViewUI.RulesContainer.activeInHierarchy)
 		{
-			gameManager.GameViewUI.HideBombContainer ();
+			gameManager.GameViewUI.RulesContainer.SetActive (false);
 		}
 	}
 
-	public void ToLevelSelectionState ()
-	{
-		Debug.Log("Let's select some level to play!");
-		gameManager.GameViewUI.ShowLevelSelectionContainer();
-	}
-
-	public void ToLevelStartState ()
-	{
-
-	}
-
-	public void ToLevelWinState ()
-	{
-		Debug.Log("[MainMenuState] : You won this level!");
-	}
-
-	public void ToLevelLoseState ()
-	{
-		Debug.Log("[MainMenuState] : You lose this level!");
-	}
-
-	public void ToPauseState ()
-	{
-		Time.timeScale = 0f;
-		gameManager.GameViewUI.ShowPauseContainer();
-	}
-
-	public void ToResumeState ()
-	{
-		Time.timeScale = 1f;
-	}
-
-	public void ToExitState()
-	{
-		Application.Quit();
-	}
+//	public void ToMainMenuState ()
+//	{
+//		Debug.Log("I am already in Main Menu");
+//
+//
+//		if(gameManager.GameViewUI.GameUIContainer.activeInHierarchy)
+//		{
+//			gameManager.GameViewUI.HideGameUIContainer ();
+//		}
+//
+//		if(gameManager.GameViewUI.BombContainer.activeInHierarchy)
+//		{
+//			gameManager.GameViewUI.HideBombContainer ();
+//		}
+//	}
+//
+//	public void ToLevelSelectionState ()
+//	{
+//		Debug.Log("Let's select some level to play!");
+//		gameManager.GameViewUI.ShowLevelSelectionContainer();
+//
+//	}
+//
+//	public void ToLevelStartState ()
+//	{
+//
+//	}
+//
+//	public void ToLevelWinState ()
+//	{
+//		Debug.Log("[MainMenuState] : You won this level!");
+//	}
+//
+//	public void ToLevelLoseState ()
+//	{
+//		Debug.Log("[MainMenuState] : You lose this level!");
+//	}
+//
+//	public void ToPauseState ()
+//	{
+//		Time.timeScale = 0f;
+//		gameManager.GameViewUI.ShowPauseContainer();
+//	}
+//
+//	public void ToResumeState ()
+//	{
+//		Time.timeScale = 1f;
+//	}
+//
+//	public void ToExitState()
+//	{
+//		Application.Quit();
+//	}
 }

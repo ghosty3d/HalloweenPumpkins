@@ -29,7 +29,7 @@ public class EnemyRunState : IEnemyState
 
 	private void Run()
 	{
-		if(enemy.CurrentEnemyType == Enemy.EnemiesTypes.Gingerbeardman)
+		if(enemy.CurrentEnemyType == Enemy.EnemiesTypes.Ghost)
 		{
 			movement.x = enemy.spawnedX + Mathf.Sin(Time.time);
 		}

@@ -13,6 +13,7 @@ public class GameUI : MonoBehaviour
 	public GameObject PauseContainer;
 	public GameObject EndLevelContainer;
 	public GameObject BombContainer;
+	public GameObject RulesContainer;
 
 	public Text TimerText;
 	public Text PlayerLivesText;
@@ -127,6 +128,27 @@ public class GameUI : MonoBehaviour
 	public void UpdateBombsCount(int count)
 	{
 		BombsCountText.text = count.ToString();
+	}
+
+	//Rules
+
+	public void ShowRulesContainer()
+	{
+		RulesContainer.SetActive (true);
+	}
+
+	public void HideRulesContainer()
+	{
+		RulesContainer.SetActive (false);
+	}
+
+	//Show Stars
+	public void ActiveStars(int count)
+	{
+		for(int i = 0; i < count; i++)
+		{
+			LevelEndUI.Instance.Stars [i].SetActive (true);
+		}
 	}
 
 }

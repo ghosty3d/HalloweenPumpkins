@@ -3,63 +3,37 @@ using System.Collections;
 
 public class PauseState : IGameState
 {
-	public GameManager gameManager;
+	public GameStatesManager gameManager;
 	
-	public PauseState(GameManager manager)
+	public PauseState(GameStatesManager manager)
 	{
 		gameManager = manager;
 	}
 
-	public void ToMainMenuState ()
+	public void EnableState ()
 	{
-		GameManager.Instance.GameViewUI.HidePauseContainer();
-		GameManager.Instance.GameViewUI.HideGameUIContainer();
-		GameManager.Instance.GameViewUI.HideLevelSelectionContainer();
-		GameManager.Instance.GameViewUI.HideBombContainer();
+		Debug.Log ("Now current state is :" + this.GetType());
 
-		GameManager.Instance.GameViewUI.ShowMainMenuContainer();
+		if(!gameManager.GameViewUI.PauseContainer.activeInHierarchy)
+		{
+			Time.timeScale = 0f;
+			gameManager.GameViewUI.ShowPauseContainer ();
 
-		EnemiesSpawner.Instance.StopEnemiesAndHide();
 
-		Time.timeScale = 1f;
-
-		gameManager.GameViewUI.GetComponent<Canvas> ().renderMode = RenderMode.ScreenSpaceOverlay;
+		}
 	}
 
-	public void ToLevelSelectionState ()
+	public void UpdateState ()
 	{
-		throw new System.NotImplementedException ();
+		
 	}
 
-	public void ToLevelStartState ()
+	public void DisableState ()
 	{
-		throw new System.NotImplementedException ();
-	}
-
-	public void ToLevelWinState ()
-	{
-		throw new System.NotImplementedException ();
-	}
-
-	public void ToLevelLoseState ()
-	{
-		throw new System.NotImplementedException ();
-	}
-
-	public void ToPauseState ()
-	{
-		Debug.Log("I am already in Pause");
-	}
-
-	public void ToResumeState ()
-	{
-		GameManager.Instance.GameViewUI.HidePauseContainer();
-		Time.timeScale = 1f;
-	}
-
-	public void ToExitState()
-	{
-		Debug.Log("Exit from app");
-		Application.Quit();
+		if(gameManager.GameViewUI.PauseContainer.activeInHierarchy)
+		{
+			Time.timeScale = 1f;
+			gameManager.GameViewUI.HidePauseContainer ();
+		}
 	}
 }

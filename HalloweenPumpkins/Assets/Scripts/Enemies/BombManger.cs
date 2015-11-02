@@ -8,13 +8,13 @@ public static class BombManger
 	public static void SetStartBombsCount(int bombs)
 	{
 		BombsCount = bombs;
-		GameManager.Instance.GameViewUI.UpdateBombsCount (BombsCount);
+		GameStatesManager.Instance.GameViewUI.UpdateBombsCount (BombsCount);
 	}
 
 	public static void AddBombs(int bombs)
 	{
 		BombsCount += bombs;
-		GameManager.Instance.GameViewUI.UpdateBombsCount (BombsCount);
+		GameStatesManager.Instance.GameViewUI.UpdateBombsCount (BombsCount);
 	}
 
 	public static void RemoveBombs(int bombs)
@@ -22,11 +22,11 @@ public static class BombManger
 		if (BombsCount > 0)
 		{
 			BombsCount -= bombs;
-			GameManager.Instance.GameViewUI.UpdateBombsCount (BombsCount);
+			GameStatesManager.Instance.GameViewUI.UpdateBombsCount (BombsCount);
 		}
 		else
 		{
-			GameManager.Instance.GameViewUI.HideBombContainer ();
+			GameStatesManager.Instance.GameViewUI.HideBombContainer ();
 		}
 	}
 }
