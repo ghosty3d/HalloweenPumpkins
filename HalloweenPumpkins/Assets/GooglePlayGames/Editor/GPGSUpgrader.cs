@@ -14,15 +14,21 @@
 //    limitations under the License.
 // </copyright>
 
-namespace GooglePlayGames
+namespace GooglePlayGames.Editor
 {
-    using UnityEngine;
-    using UnityEditor;
     using System.IO;
+    using UnityEditor;
+    using UnityEngine;
 
+    /// <summary>
+    /// GPGS upgrader handles performing and upgrade tasks.
+    /// </summary>
     [InitializeOnLoad]
     public class GPGSUpgrader
     {
+        /// <summary>
+        /// Initializes static members of the <see cref="GooglePlayGames.GPGSUpgrader"/> class.
+        /// </summary>
         static GPGSUpgrader()
         {
             string prevVer = GPGSProjectSettings.Instance.Get(GPGSUtil.LASTUPGRADEKEY, "00000");
@@ -36,20 +42,196 @@ namespace GooglePlayGames
 
                 prevVer = Upgrade915(prevVer);
 
-                // there is no migration needed to 920+
-                Debug.Log("Upgrading from format version " + prevVer + " to " + PluginVersion.VersionKey);
-                prevVer = PluginVersion.VersionKey;
-                string msg = GPGSStrings.PostInstall.Text.Replace("$VERSION",
+                prevVer = Upgrade927Patch(prevVer);
+
+                // Upgrade to remove gpg version of jar resolver
+                prevVer = Upgrade928(prevVer);
+
+                prevVer = Upgrade930(prevVer);
+
+                // there is no migration needed to 930+
+                if (prevVer != PluginVersion.VersionKey) {
+                    Debug.Log("Upgrading from format version " + prevVer + " to " + PluginVersion.VersionKey);
+                    prevVer = PluginVersion.VersionKey;
+                }
+
+                string msg = GPGSStrings.PostInstall.Text.Replace(
+                                 "$VERSION",
                                  PluginVersion.VersionString);
                 EditorUtility.DisplayDialog(GPGSStrings.PostInstall.Title, msg, "OK");
-
             }
 
             GPGSProjectSettings.Instance.Set(GPGSUtil.LASTUPGRADEKEY, prevVer);
             GPGSProjectSettings.Instance.Save();
+
+            // clean up duplicate scripts if Unity 5+
+            int ver = GPGSUtil.GetUnityMajorVersion();
+
+            if (ver >= 5)
+            {
+                string[] paths =
+                    {
+                        "Assets/GooglePlayGames",
+                        "Assets/Plugins/Android"
+                    };
+                foreach (string p in paths)
+                {
+                    CleanDuplicates(p);
+                }
+
+                // remove support lib from old location.
+                string jarFile =
+                    "Assets/Plugins/Android/libs/android-support-v4.jar";
+                if (File.Exists(jarFile))
+                {
+                    File.Delete(jarFile);
+                }
+
+                // remove the massive play services client lib
+                string clientDir = "Assets/Plugins/Android/google-play-services_lib";
+                GPGSUtil.DeleteDirIfExists(clientDir);
+            }
+
+            // Check that there is a AndroidManifest.xml file
+            if (!GPGSUtil.AndroidManifestExists())
+            {
+                GPGSUtil.GenerateAndroidManifest(false);
+            }
+
             AssetDatabase.Refresh();
         }
 
+        /// <summary>
+        /// Cleans the duplicate files.  There should not be any since
+        /// we are keeping track of the .meta files.
+        /// </summary>
+        /// <param name="root">Root of the directory to clean.</param>
+        private static void CleanDuplicates(string root)
+        {
+            string[] subDirs = Directory.GetDirectories(root);
+
+            // look for .1 and .2
+            string[] dups = Directory.GetFiles(root, "* 1.*");
+            foreach (string d in dups)
+            {
+                Debug.Log("Deleting duplicate file: " + d);
+                File.Delete(d);
+            }
+
+            dups = Directory.GetFiles(root, "* 2.*");
+            foreach (string d in dups)
+            {
+                Debug.Log("Deleting duplicate file: " + d);
+                File.Delete(d);
+            }
+
+            // recurse
+            foreach (string s in subDirs)
+            {
+                CleanDuplicates(s);
+            }
+        }
+
+        /// <summary>
+        /// Upgrade to 930 from the specified prevVer.
+        /// </summary>
+        /// <param name="prevVer">Previous ver.</param>
+        /// <returns>the version string upgraded to.</returns>
+        private static string Upgrade930(string prevVer)
+        {
+            Debug.Log("Upgrading from format version " + prevVer + " to " + PluginVersion.VersionKeyNativeCRM);
+
+            // As of 930, the CRM API is handled by the Native SDK, not GmsCore.
+            string[] obsoleteFiles =
+            {
+                "Assets/GooglePlayGames/Platforms/Android/Gms/Games/Games.cs",
+                "Assets/GooglePlayGames/Platforms/Android/Gms/Games/Games.cs.meta",
+                "Assets/GooglePlayGames/Platforms/Android/Gms/Games/Stats/LoadPlayerStatsResultObject.cs",
+                "Assets/GooglePlayGames/Platforms/Android/Gms/Games/Stats/LoadPlayerStatsResultObject.cs.meta",
+                "Assets/GooglePlayGames/Platforms/Android/Gms/Games/Stats/PlayerStats.cs",
+                "Assets/GooglePlayGames/Platforms/Android/Gms/Games/Stats/PlayerStats.cs.meta",
+                "Assets/GooglePlayGames/Platforms/Android/Gms/Games/Stats/PlayerStatsObject.cs",
+                "Assets/GooglePlayGames/Platforms/Android/Gms/Games/Stats/PlayerStatsObject.cs.meta",
+                "Assets/GooglePlayGames/Platforms/Android/Gms/Games/Stats/Stats.cs",
+                "Assets/GooglePlayGames/Platforms/Android/Gms/Games/Stats/Stats.cs.meta",
+                "Assets/GooglePlayGames/Platforms/Android/Gms/Games/Stats/StatsObject.cs",
+                "Assets/GooglePlayGames/Platforms/Android/Gms/Games/Stats/StatsObject.cs.meta"
+            };
+
+            foreach (string file in obsoleteFiles)
+            {
+                if (File.Exists(file))
+                {
+                    Debug.Log("Deleting obsolete file: " + file);
+                    File.Delete(file);
+                }
+            }
+
+            return PluginVersion.VersionKeyNativeCRM;
+        }
+
+        private static string Upgrade928(string prevVer)
+        {
+            //remove the jar resolver and if found, then
+            // warn the user that restarting the editor is required.
+            string[] obsoleteFiles =
+                {
+                    "Assets/GooglePlayGames/Editor/JarResolverLib.dll",
+                    "Assets/GooglePlayGames/Editor/JarResolverLib.dll.meta",
+                    "Assets/GooglePlayGames/Editor/BackgroundResolution.cs",
+                    "Assets/GooglePlayGames/Editor/BackgroundResolution.cs.meta"
+                };
+
+            bool found = File.Exists(obsoleteFiles[0]);
+
+            foreach (string file in obsoleteFiles)
+            {
+                if (File.Exists(file))
+                {
+                    Debug.Log("Deleting obsolete file: " + file);
+                    File.Delete(file);
+                }
+            }
+
+            if (found)
+            {
+                GPGSUtil.Alert("This update made changes that requires that you restart the editor");
+            }
+
+            Debug.Log("Upgrading from version " + prevVer + " to " + PluginVersion.VersionKeyJarResolver);
+            return PluginVersion.VersionKeyJarResolver;
+        }
+
+        /// <summary>
+        /// Upgrade to 0.9.27a.
+        /// </summary>
+        /// <remarks>This removes the GPGGizmo class, which broke the editor</remarks>
+        /// <returns>The patched version</returns>
+        /// <param name="prevVer">Previous version</param>
+        private static string Upgrade927Patch(string prevVer)
+        {
+            string[] obsoleteFiles =
+                {
+                    "Assets/GooglePlayGames/Editor/GPGGizmo.cs",
+                    "Assets/GooglePlayGames/Editor/GPGGizmo.cs.meta"
+                };
+            foreach (string file in obsoleteFiles)
+            {
+                if (File.Exists(file))
+                {
+                    Debug.Log("Deleting obsolete file: " + file);
+                    File.Delete(file);
+                }
+            }
+
+            return PluginVersion.VersionKey27Patch;
+        }
+
+        /// <summary>
+        /// Upgrade to 915 from the specified prevVer.
+        /// </summary>
+        /// <param name="prevVer">Previous ver.</param>
+        /// <returns>the version string upgraded to.</returns>
         private static string Upgrade915(string prevVer)
         {
             Debug.Log("Upgrading from format version " + prevVer + " to " + PluginVersion.VersionKeyU5);
@@ -107,6 +289,11 @@ namespace GooglePlayGames
             return PluginVersion.VersionKeyU5;
         }
 
+        /// <summary>
+        /// Upgrade to 911 from the specified prevVer.
+        /// </summary>
+        /// <param name="prevVer">Previous ver.</param>
+        /// <returns>the version string upgraded to.</returns>
         private static string Upgrade911(string prevVer)
         {
             Debug.Log("Upgrading from format version " + prevVer + " to " + PluginVersion.VersionKeyCPP);
@@ -134,8 +321,8 @@ namespace GooglePlayGames
             // delete obsolete directories, if they are there
             string[] obsoleteDirectories =
                 {
-                "Assets/Plugins/Android/BaseGameUtils"
-            };
+                    "Assets/Plugins/Android/BaseGameUtils"
+                };
 
             foreach (string directory in obsoleteDirectories)
             {

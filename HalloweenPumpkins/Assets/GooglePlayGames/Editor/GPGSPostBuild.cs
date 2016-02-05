@@ -14,7 +14,7 @@
 //    limitations under the License.
 // </copyright>
 
-namespace GooglePlayGames
+namespace GooglePlayGames.Editor
 {
     using System;
     using System.Collections.Generic;
@@ -24,10 +24,12 @@ namespace GooglePlayGames
 
     // Use the included xcode support for unity 5+,
     // otherwise use the backported code.
-#if UNITY_5
-    using UnityEditor.iOS.Xcode;
-#else
-    using GooglePlayGames.xcode;
+#if (UNITY_IOS || UNITY_IPHONE)
+    #if UNITY_5
+        using UnityEditor.iOS.Xcode;
+    #else
+        using GooglePlayGames.xcode;
+    #endif
 #endif
     using GooglePlayGames;
     using GooglePlayGames.Editor.Util;
@@ -47,6 +49,12 @@ namespace GooglePlayGames
 #if UNITY_5
             if (target != BuildTarget.iOS)
             {
+                if (!GPGSProjectSettings.Instance.GetBool(GPGSUtil.ANDROIDSETUPDONEKEY, false))
+                {
+                    EditorUtility.DisplayDialog("Google Play Games not configured!",
+                        "Warning!!  Google Play Games was not configured, Game Services will not work correctly.",
+                        "OK");
+                }
                 return;
             }
 #else
@@ -56,6 +64,7 @@ namespace GooglePlayGames
             }
 #endif
 
+#if UNITY_IOS
             #if NO_GPGS
 
             string[] filesToRemove = {
@@ -87,6 +96,13 @@ namespace GooglePlayGames
 
             #else
 
+            if (!GPGSProjectSettings.Instance.GetBool(GPGSUtil.IOSSETUPDONEKEY, false))
+            {
+                EditorUtility.DisplayDialog("Google Play Games not configured!",
+                    "Warning!!  Google Play Games was not configured, Game Services will not work correctly.",
+                    "OK");
+            }
+
             if (GetBundleId() == null)
             {
                 UnityEngine.Debug.LogError("The iOS bundle ID has not been set up through the " +
@@ -116,6 +132,7 @@ namespace GooglePlayGames
             UpdateGeneratedPbxproj(pathToBuiltProject + "/Unity-iPhone.xcodeproj/project.pbxproj");
 
         #endif
+#endif
         }
 
         /// <summary>
@@ -209,6 +226,7 @@ namespace GooglePlayGames
             return revClientId;
         }
 
+#if UNITY_IOS || UNITY_IPHONE
         /// <summary>
         /// Updates the generated pbxproj to reduce manual work required by developers. Currently
         /// this adds the '-fobjc-arc' flag for the Play Games ObjC source file.
@@ -249,6 +267,7 @@ namespace GooglePlayGames
 
             File.WriteAllText(pbxprojPath, proj.WriteToString());
         }
+#endif
     }
 }
 
