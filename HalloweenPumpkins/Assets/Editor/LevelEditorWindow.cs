@@ -9,7 +9,9 @@ public class LevelEditorWindow : EditorWindow
 {
     public static string configPath = Application.dataPath + "/Config/level.json";
 
+    public LevelStorage levelStorage;
     public Level newLevel;
+    public int selectedLevelId = 0;
 
     [MenuItem("Levels/LevelsEditor")]
     static void Init()
@@ -24,14 +26,53 @@ public class LevelEditorWindow : EditorWindow
     {
         if (GUILayout.Button("Load Config", GUILayout.ExpandWidth(true), GUILayout.Height(32)))
         {
-           
-            Debug.Log(configPath);
+            levelStorage = Serializer.Deserialize<LevelStorage>(configPath);
+            Debug.Log(levelStorage.levelsList.Count);
+        }
 
-          
+        EditorGUILayout.Space();
 
-           // Level level = new Level(2, 3, 4, 5, 6, true, 10000);
-           // Serializer.Serialize(level, configPath);
-            newLevel = Serializer.Deserialize<Level>(configPath);
+        if (GUILayout.Button("Create New Level", GUILayout.ExpandWidth(true), GUILayout.Height(32)))
+        {
+            levelStorage = Serializer.Deserialize<LevelStorage>(configPath);
+        }
+
+        GUILayout.Label("Levels List: ");
+
+        if (levelStorage == null)
+        {
+            levelStorage = new LevelStorage();
+            levelStorage.levelsList = new List<Level>();
+        }
+        else
+        {
+            GUILayout.BeginHorizontal();
+
+            if (GUILayout.Button("Prev", GUILayout.Height(32)))
+            {
+                if (selectedLevelId > 0)
+                {
+                    if (levelStorage.levelsList.Count > 1)
+                    {
+                        selectedLevelId--;
+                        newLevel = levelStorage.levelsList[selectedLevelId];
+                    }
+                }
+            }
+            if (GUILayout.Button("Next", GUILayout.Height(32)))
+            {
+                if (selectedLevelId < levelStorage.levelsList.Count - 1)
+                {
+                    if (levelStorage.levelsList.Count > 1)
+                    {
+                        selectedLevelId++;
+                        newLevel = levelStorage.levelsList[selectedLevelId];
+                    }
+                }
+
+            }
+
+            GUILayout.EndHorizontal();
         }
 
         if (newLevel != null)
@@ -45,10 +86,16 @@ public class LevelEditorWindow : EditorWindow
             newLevel.Stars = EditorGUILayout.IntField(string.Format("Level Stars:\t\t"), newLevel.Stars);
         }
 
-        if (GUILayout.Button("Update Config", GUILayout.ExpandWidth(true), GUILayout.Height(32)))
+        EditorGUILayout.Space();
+
+        if (levelStorage != null)
         {
-            Serializer.Serialize(newLevel, configPath);
-            AssetDatabase.Refresh();
+            if (GUILayout.Button("Update Config", GUILayout.ExpandWidth(true), GUILayout.Height(32)))
+            {
+                Serializer.Serialize(levelStorage, configPath);
+                AssetDatabase.Refresh();
+            }
         }
+
     }
 }

@@ -1,1 +1,22 @@
-{"ID":0,"LevelTime":30,"WavesCount":1,"MinEnemyCount":3,"MaxEnemyCount":6,"isLocked":false,"Stars":0}
+{
+    "levelsList": [
+        {
+            "ID": 0,
+            "isLocked": false,
+            "LevelTime": 20,
+            "MaxEnemyCount": 6,
+            "MinEnemyCount": 3,
+            "Stars": 10,
+            "WavesCount": 1
+        },
+        {
+            "ID": 1,
+            "LevelTime": 40,
+            "WavesCount": 2,
+            "MinEnemyCount": 3,
+            "MaxEnemyCount": 6,
+            "isLocked": false,
+            "Stars": 0
+        }
+    ]
+}
