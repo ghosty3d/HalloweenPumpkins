@@ -13,7 +13,6 @@ public class LevelButton : MonoBehaviour
 
 	public UnityAction clickAction;
 
-	public int StarsObtained;
 	public List<GameObject> LevelStars = new List<GameObject> ();
 
 	void Start()
@@ -35,22 +34,16 @@ public class LevelButton : MonoBehaviour
 
 	public void RankLevel()
 	{
-		if (LevelsManager.Instance != null && LevelsManager.Instance.LevelsList.Count > 0)
+		if (LevelsManager.Instance != null && LevelsManager.Instance.levelStorage.LevelsCount > 0)
 		{
 			//Debug.Log (LevelsManager.Instance.LevelsList[0].Stars);
 			//Debug.Log(LevelID - 1);
-			StarsObtained = LevelsManager.Instance.LevelsList [LevelID - 1].Stars;
 
-			Debug.Log (StarsObtained);
 
-			for(int i = 0; i < StarsObtained; i++)
+			for(int i = 0; i < LevelsManager.Instance.CurrentLevel.Stars; i++)
 			{
 				LevelStars [i].SetActive (true);
 			}
-		}
-		else
-		{
-			return;
 		}
 	}
 }

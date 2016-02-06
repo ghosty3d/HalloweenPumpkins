@@ -25,17 +25,17 @@ public class LevelSelectionUI : MonoBehaviour
 
 	public void SetLevelButtons()
 	{
-		if(LevelsManager.Instance.LevelsList.Count > 0)
+		if(LevelsManager.Instance.levelStorage.LevelsCount > 0)
 		{
-			for(int i = 0; i < LevelsManager.Instance.LevelsList.Count; i++)
+			for(int i = 0; i < LevelsManager.Instance.levelStorage.LevelsCount; i++)
 			{
 				GameObject newLvlButton = Instantiate(LevelButton);
 				newLvlButton.transform.SetParent(Grid.transform);
 				newLvlButton.transform.localScale = Vector3.one;
-				newLvlButton.GetComponent<LevelButton>().LevelID = LevelsManager.Instance.LevelsList[i].ID;
+				newLvlButton.GetComponent<LevelButton>().LevelID = LevelsManager.Instance.levelStorage.levelsList[i].ID;
 				LevelsButtons.Add (newLvlButton);
 
-				if (LevelsManager.Instance.LevelsList [i].isLocked)
+				if (LevelsManager.Instance.levelStorage.levelsList [i].isLocked)
 				{
 					newLvlButton.GetComponent<LevelButton> ().lockIcon.enabled = true;
 					newLvlButton.GetComponent<Button> ().interactable = false;

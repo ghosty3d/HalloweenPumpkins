@@ -6,6 +6,17 @@ public class LevelStorage
 {
     public List<Level> levelsList;
 
+    public int LevelsCount
+    {
+        get
+        {
+            if (levelsList != null)
+                return levelsList.Count;
+            else
+                return 0;
+        }
+    }
+
     public LevelStorage()
     {
 

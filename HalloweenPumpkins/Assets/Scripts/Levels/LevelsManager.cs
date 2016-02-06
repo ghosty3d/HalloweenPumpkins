@@ -10,12 +10,13 @@ public class LevelsManager : MonoBehaviour
 
 	public Level CurrentLevel;
 
-    public string configPath = Application.dataPath + "/Config/level.json";
+    public string configPath;
 
 	void Awake()
 	{
 		Instance = this;
-		InitLevels();
+        configPath = Application.dataPath + "/Config/level.json";
+        InitLevels();
 	}
 
 	public void InitLevels()

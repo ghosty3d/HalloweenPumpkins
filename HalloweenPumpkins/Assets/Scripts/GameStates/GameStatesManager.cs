@@ -102,7 +102,6 @@ public class GameStatesManager : MonoBehaviour
 
 		//Update Model Data
 		levelManager.CurrentLevel.Stars = rank;
-		levelManager.LevelsList [levelManager.CurrentLevel.ID - 1].Stars = rank;
 	}
 
 	public void GoToMainMenu()
