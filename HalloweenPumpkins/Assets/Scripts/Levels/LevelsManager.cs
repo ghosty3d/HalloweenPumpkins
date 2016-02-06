@@ -6,32 +6,33 @@ public class LevelsManager : MonoBehaviour
 {
 	public static LevelsManager Instance;
 
-	public int LevelsCout;
-	public List<Level> LevelsList = new List<Level>();
+    public LevelStorage levelStorage;
 
 	public Level CurrentLevel;
+
+    public string configPath = Application.dataPath + "/Config/level.json";
 
 	void Awake()
 	{
 		Instance = this;
-		InitLevels(LevelsCout);
+		InitLevels();
 	}
 
-	public void InitLevels(int count)
+	public void InitLevels()
 	{
-		//Test code, here should be some kind of data from JSON or other config
-		for(int i = 0; i < count; i++)
-		{
-			Level newLevel = new Level(i + 1, 25, 3 + i, 2 + i, 5 + i, false, 0);
-			LevelsList.Add(newLevel);
-		}
-
-		//Lock last level
-		LevelsList[LevelsList.Count - 1].isLocked = true;
+        levelStorage = Serializer.Deserialize<LevelStorage>(configPath);
 	}
 
-	public void SelectLevel(int id)
-	{
-		CurrentLevel = LevelsList[id - 1];
-	}
+    public void SelectLevel(int id)
+    {
+        if (levelStorage != null)
+        {
+            CurrentLevel = levelStorage.levelsList[id];
+        }
+    }
+
+    public void SaveLevelResult()
+    {
+        Serializer.Serialize(levelStorage, configPath);
+    }
 }
