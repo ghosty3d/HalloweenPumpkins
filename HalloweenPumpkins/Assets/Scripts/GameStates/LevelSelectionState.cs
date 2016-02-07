@@ -20,7 +20,8 @@ public class LevelSelectionState : IGameState
 
 		for(int i = 0; i < gameManager.GameViewUI.LevelSelectionContainer.GetComponent<LevelSelectionUI>().LevelsButtons.Count; i++)
 		{
-			gameManager.GameViewUI.LevelSelectionContainer.GetComponent<LevelSelectionUI>().LevelsButtons[i].GetComponent<LevelButton> ().RankLevel ();
+			gameManager.GameViewUI.LevelSelectionContainer.GetComponent<LevelSelectionUI>().LevelsButtons[i].GetComponent<LevelButton> ().RankLevel (i);
+            
 		}
 	}
 

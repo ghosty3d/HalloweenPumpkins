@@ -32,15 +32,13 @@ public class LevelButton : MonoBehaviour
 		}
 	}
 
-	public void RankLevel()
+	public void RankLevel(int ID)
 	{
-		if (LevelsManager.Instance != null && LevelsManager.Instance.levelStorage.LevelsCount > 0)
+        if (LevelsManager.Instance != null && LevelsManager.Instance.levelStorage.LevelsCount > 0)
 		{
-			//Debug.Log (LevelsManager.Instance.LevelsList[0].Stars);
-			//Debug.Log(LevelID - 1);
+            int _starsCount = LevelsManager.Instance.levelStorage.levelsList[ID].Stars;
 
-
-			for(int i = 0; i < LevelsManager.Instance.CurrentLevel.Stars; i++)
+            for (int i = 0; i < _starsCount; i++)
 			{
 				LevelStars [i].SetActive (true);
 			}

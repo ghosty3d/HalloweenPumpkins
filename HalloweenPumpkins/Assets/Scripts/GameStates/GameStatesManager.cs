@@ -106,7 +106,11 @@ public class GameStatesManager : MonoBehaviour
 
 	public void GoToMainMenu()
 	{
-		levelLoseState.DisableState ();
+        Serializer.Serialize(levelManager.levelStorage , ConfigsPath.configPath);
+#if UNITY_EDITOR
+        UnityEditor.AssetDatabase.Refresh();
+#endif
+        levelLoseState.DisableState ();
 		levelWonState.DisableState ();
 		pauseState.DisableState ();
 		levelGameState.DisableState ();
