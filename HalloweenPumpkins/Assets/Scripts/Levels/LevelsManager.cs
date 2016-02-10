@@ -5,18 +5,12 @@ using System.Collections.Generic;
 public class LevelsManager : MonoBehaviour
 {
 	public static LevelsManager Instance;
-
     public LevelStorage levelStorage;
-
 	public Level CurrentLevel;
-
-
 
 	void Awake()
 	{
-        Debug.LogError("!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		Instance = this;
-        
+		Instance = this;        
         InitLevels();
 	}
 
