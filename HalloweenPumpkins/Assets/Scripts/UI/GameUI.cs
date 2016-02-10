@@ -55,6 +55,7 @@ public class GameUI : MonoBehaviour
 	public void ShowLevelSelectionContainer()
 	{
 		LevelSelectionContainer.SetActive(true);
+        LevelSelectionUI.Instance.SetLevelButtons();
 	}
 	
 	public void HideLevelSelectionContainer()

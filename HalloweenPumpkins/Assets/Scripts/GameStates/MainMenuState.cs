@@ -14,6 +14,8 @@ public class MainMenuState : IGameState
 	{
 		Debug.Log ("Now current state is :" + this.GetType());
 
+
+
 		if(!gameManager.GameViewUI.MainMenuContainer.gameObject.activeInHierarchy)
 		{
 			gameManager.GameViewUI.ShowMainMenuContainer();
@@ -25,7 +27,7 @@ public class MainMenuState : IGameState
 
 	public void UpdateState ()
 	{
-		Debug.Log ("Now current state is :" + this.GetType() + " in Update");
+		//Debug.Log ("Now current state is :" + this.GetType() + " in Update");
 	}
 
 	public void DisableState ()

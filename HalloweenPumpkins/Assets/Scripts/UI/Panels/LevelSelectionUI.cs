@@ -18,10 +18,6 @@ public class LevelSelectionUI : MonoBehaviour
 		Instance = this;
 	}
 
-	void Start()
-	{
-		SetLevelButtons();
-	}
 
 	public void SetLevelButtons()
 	{

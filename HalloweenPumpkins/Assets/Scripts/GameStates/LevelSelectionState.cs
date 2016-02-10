@@ -13,16 +13,24 @@ public class LevelSelectionState : IGameState
 
 	public void EnableState ()
 	{
-		if (!gameManager.GameViewUI.LevelSelectionContainer.activeInHierarchy)
-		{
-			gameManager.GameViewUI.ShowLevelSelectionContainer ();
-		}
+        
+        if (!gameManager.GameViewUI.LevelSelectionContainer.activeInHierarchy)
+        {
+            gameManager.GameViewUI.ShowLevelSelectionContainer();
+        }
+       
 
-		for(int i = 0; i < gameManager.GameViewUI.LevelSelectionContainer.GetComponent<LevelSelectionUI>().LevelsButtons.Count; i++)
-		{
-			gameManager.GameViewUI.LevelSelectionContainer.GetComponent<LevelSelectionUI>().LevelsButtons[i].GetComponent<LevelButton> ().RankLevel (i);
-            
-		}
+        var levelSelectionUI = gameManager.GameViewUI.LevelSelectionContainer.GetComponent<LevelSelectionUI>();
+
+        if (levelSelectionUI != null)
+        {
+            for (int i = 0; i < levelSelectionUI.LevelsButtons.Count; i++)
+            {
+                levelSelectionUI.LevelsButtons[i].GetComponent<LevelButton>().RankLevel(i);
+
+
+            }
+        }
 	}
 
 	public void UpdateState ()

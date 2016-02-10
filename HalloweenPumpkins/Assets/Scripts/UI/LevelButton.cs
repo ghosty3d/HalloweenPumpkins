@@ -11,12 +11,17 @@ public class LevelButton : MonoBehaviour
 	public Button button;
 	public Image lockIcon;
 
+
 	public UnityAction clickAction;
 
 	public List<GameObject> LevelStars = new List<GameObject> ();
 
-	void Start()
+    private LevelsManager _levelManager;
+
+	void OnEnable()
 	{
+        Debug.LogError("Start");
+        _levelManager = LevelsManager.Instance;
 		ButtonText.text = LevelID.ToString();
 		button = GetComponent<Button>();
 		clickAction = LevelSelection;
@@ -25,23 +30,23 @@ public class LevelButton : MonoBehaviour
 
 	public void LevelSelection()
 	{
-		if(LevelsManager.Instance.CurrentLevel != null)
+		if(_levelManager.CurrentLevel != null)
 		{
-			LevelsManager.Instance.SelectLevel(LevelID);
+            _levelManager.SelectLevel(LevelID);
 			GameStatesManager.Instance.GoToLevelStart();
 		}
 	}
 
-	public void RankLevel(int ID)
-	{
-        if (LevelsManager.Instance != null && LevelsManager.Instance.levelStorage.LevelsCount > 0)
-		{
-            int _starsCount = LevelsManager.Instance.levelStorage.levelsList[ID].Stars;
+    public void RankLevel(int ID)
+    {
+        Debug.LogError("_levelManager" + _levelManager);
+        Debug.LogError("levelStorage" + LevelsManager.Instance.levelStorage);
+        Debug.LogError("levelsList" + _levelManager.levelStorage.levelsList.Count);
+        int _starsCount = _levelManager.levelStorage.levelsList[ID].Stars;
 
-            for (int i = 0; i < _starsCount; i++)
-			{
-				LevelStars [i].SetActive (true);
-			}
-		}
-	}
+        for (int i = 0; i < _starsCount; i++)
+        {
+            LevelStars[i].SetActive(true);
+        }
+    }
 }

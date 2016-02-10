@@ -111,8 +111,9 @@ public class EnemiesSpawner : MonoBehaviour
 			else
 			{
 				GameStatesManager.Instance.GoToWonState ();
-				yield return null;
+                break;
 			}
+
 		}
 	}
 
@@ -156,9 +157,7 @@ public class EnemiesSpawner : MonoBehaviour
 	/// </summary>
 	public void StopEnemiesAndHide()
 	{
-		spawnMore = false;
-
-		StopAllCoroutines ();
+        StopEnemies();
 
 		for (int i = 0; i < EnemiesPool.Count; i++) 
 		{

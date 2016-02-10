@@ -10,18 +10,19 @@ public class LevelsManager : MonoBehaviour
 
 	public Level CurrentLevel;
 
-    public string configPath;
+
 
 	void Awake()
 	{
+        Debug.LogError("!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		Instance = this;
-        configPath = Application.dataPath + "/Config/level.json";
+        
         InitLevels();
 	}
 
 	public void InitLevels()
 	{
-        levelStorage = Serializer.Deserialize<LevelStorage>(configPath);
+        levelStorage = ConfigManager.GetLevelStorage();
 	}
 
     public void SelectLevel(int id)
@@ -30,10 +31,5 @@ public class LevelsManager : MonoBehaviour
         {
             CurrentLevel = levelStorage.levelsList[id];
         }
-    }
-
-    public void SaveLevelResult()
-    {
-        Serializer.Serialize(levelStorage, configPath);
     }
 }
