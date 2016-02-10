@@ -1,1 +1,1 @@
-{"levelsList":[{"ID":0,"LevelTime":20,"WavesCount":1,"MinEnemyCount":3,"MaxEnemyCount":6,"isLocked":false,"Stars":3},{"ID":1,"LevelTime":40,"WavesCount":2,"MinEnemyCount":3,"MaxEnemyCount":6,"isLocked":false,"Stars":3}],"LevelsCount":2}
+{"levelsList":[{"ID":0,"LevelTime":10,"WavesCount":1,"MinEnemyCount":3,"MaxEnemyCount":6,"isLocked":false,"Stars":2},{"ID":1,"LevelTime":40,"WavesCount":2,"MinEnemyCount":3,"MaxEnemyCount":6,"isLocked":false,"Stars":0}],"LevelsCount":2}

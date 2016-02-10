@@ -20,9 +20,7 @@ public class LevelButton : MonoBehaviour
 
 	void OnEnable()
 	{
-        Debug.LogError("Start");
         _levelManager = LevelsManager.Instance;
-		ButtonText.text = LevelID.ToString();
 		button = GetComponent<Button>();
 		clickAction = LevelSelection;
 		button.onClick.AddListener(clickAction);
@@ -37,16 +35,28 @@ public class LevelButton : MonoBehaviour
 		}
 	}
 
-    public void RankLevel(int ID)
+	public void GetLevelData(Level _level)
     {
-        Debug.LogError("_levelManager" + _levelManager);
-        Debug.LogError("levelStorage" + LevelsManager.Instance.levelStorage);
-        Debug.LogError("levelsList" + _levelManager.levelStorage.levelsList.Count);
-        int _starsCount = _levelManager.levelStorage.levelsList[ID].Stars;
+		//ID
+		LevelID = _level.ID;
+		ButtonText.text = _level.ID.ToString();
 
-        for (int i = 0; i < _starsCount; i++)
-        {
-            LevelStars[i].SetActive(true);
-        }
+		//Locked
+		if (_level.isLocked)
+		{
+			lockIcon.enabled = true;
+			button.interactable = false;
+		}
+		else
+		{
+			lockIcon.enabled = false;
+			button.interactable = true;
+		}
+
+		//Stars
+		for (int i = 0; i < _level.Stars; i++)
+		{
+			LevelStars[i].SetActive(true);
+		}
     }
 }
