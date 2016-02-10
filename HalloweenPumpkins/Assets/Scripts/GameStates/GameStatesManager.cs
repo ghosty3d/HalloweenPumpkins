@@ -30,7 +30,10 @@ public class GameStatesManager : MonoBehaviour
 
 	public int PlayerLivesMax = 3;
 	public int PlayerLives = 3;
+	public int PlayerBombsCountMax = 3;
 	public int PlayerBombsCount = 3;
+
+	public int MaxLevelStars = 3;
 
 	void Awake()
 	{
@@ -79,23 +82,23 @@ public class GameStatesManager : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Check conditions after user will finish level and gets the new level rank.
+	/// </summary>
 	public void GetNewLevelRank()
 	{
-		int rank = 0;
-
-		//Add point for level complete
-		rank++;
+		int rank = MaxLevelStars;
 
 		//Add point if player didn't lose no one lives
-		if(PlayerLives == PlayerLivesMax)
+		if(PlayerLives != PlayerLivesMax)
 		{
-			rank++;
+			rank--;
 		}
 
 		//Add point if player didn't use any bombs
-		if (BombManger.BombsCount >= 3)
+		if (BombManger.BombsCount < PlayerBombsCountMax)
 		{
-			rank++;
+			rank--;
 		}
 
 		GameUI.Instance.ActiveStars (rank);
