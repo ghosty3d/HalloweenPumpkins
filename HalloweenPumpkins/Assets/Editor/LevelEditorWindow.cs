@@ -27,7 +27,8 @@ public class LevelEditorWindow : EditorWindow
         if (GUILayout.Button("Load Config", GUILayout.ExpandWidth(true), GUILayout.Height(32)))
         {
             levelStorage = Serializer.Deserialize<LevelStorage>(configPath);
-            Debug.Log(levelStorage.levelsList.Count);
+			newLevel = levelStorage.levelsList [0];
+			Repaint ();
         }
 
         EditorGUILayout.Space();
@@ -44,38 +45,37 @@ public class LevelEditorWindow : EditorWindow
             levelStorage = new LevelStorage();
             levelStorage.levelsList = new List<Level>();
         }
-        else
-        {
-            GUILayout.BeginHorizontal();
 
-            if (GUILayout.Button("Prev", GUILayout.Height(32)))
-            {
-                if (selectedLevelId > 0)
-                {
-                    if (levelStorage.levelsList.Count > 1)
-                    {
-                        selectedLevelId--;
-                        newLevel = levelStorage.levelsList[selectedLevelId];
-                    }
-                }
-            }
-            if (GUILayout.Button("Next", GUILayout.Height(32)))
-            {
-                if (selectedLevelId < levelStorage.levelsList.Count - 1)
-                {
-                    if (levelStorage.levelsList.Count > 1)
-                    {
-                        selectedLevelId++;
-                        newLevel = levelStorage.levelsList[selectedLevelId];
-                    }
-                }
+		GUILayout.BeginHorizontal();
 
-            }
+		if (GUILayout.Button("Prev", GUILayout.Height(32)))
+		{
+			if (selectedLevelId > 0)
+			{
+				if (levelStorage.levelsList.Count > 1)
+				{
+					selectedLevelId--;
+					newLevel = levelStorage.levelsList[selectedLevelId];
+				}
+			}
+		}
 
-            GUILayout.EndHorizontal();
-        }
+		if (GUILayout.Button("Next", GUILayout.Height(32)))
+		{
+			if (selectedLevelId < levelStorage.levelsList.Count - 1)
+			{
+				if (levelStorage.levelsList.Count > 1)
+				{
+					selectedLevelId++;
+					newLevel = levelStorage.levelsList[selectedLevelId];
+				}
+			}
 
-        DrawLevelInfo();
+		}
+
+		GUILayout.EndHorizontal();
+
+		DrawLevelInfo();
 
         EditorGUILayout.Space();
 
