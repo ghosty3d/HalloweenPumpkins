@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Game States Manager. Allows to swtich between different Game States.
+/// </summary>
 public class GameStatesManager : MonoBehaviour
 {
 	public static GameStatesManager Instance;

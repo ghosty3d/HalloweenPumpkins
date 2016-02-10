@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Level Game State. Actualy GamePlay State at the loaded level.
+/// </summary>
 public class LevelGameState : IGameState
 {
 	public GameStatesManager gameManager;

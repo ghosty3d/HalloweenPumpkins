@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Exit Game State. Close application at Mobile Device.
+/// </summary>
 public class ExitGameState : IGameState
 {
 	public GameStatesManager gameManager;

@@ -2,6 +2,9 @@
 using UnityEngine.UI;
 using System.Collections;
 
+/// <summary>
+/// Level Selection Game State.
+/// </summary>
 public class LevelSelectionState : IGameState
 {
 	public GameStatesManager gameManager;
@@ -12,24 +15,12 @@ public class LevelSelectionState : IGameState
 	}
 
 	public void EnableState ()
-	{
-        
-        if (!gameManager.GameViewUI.LevelSelectionContainer.activeInHierarchy)
+	{       
+		Debug.Log ("Now current state is :" + this.GetType());
+
+		if (!gameManager.GameViewUI.LevelSelectionContainer.activeInHierarchy)
         {
             gameManager.GameViewUI.ShowLevelSelectionContainer();
-        }
-       
-
-        var levelSelectionUI = gameManager.GameViewUI.LevelSelectionContainer.GetComponent<LevelSelectionUI>();
-
-        if (levelSelectionUI != null)
-        {
-            for (int i = 0; i < levelSelectionUI.LevelsButtons.Count; i++)
-            {
-                levelSelectionUI.LevelsButtons[i].GetComponent<LevelButton>().RankLevel(i);
-
-
-            }
         }
 	}
 
@@ -45,58 +36,4 @@ public class LevelSelectionState : IGameState
 			gameManager.GameViewUI.HideLevelSelectionContainer ();
 		}
 	}
-		
-//	public void ToLevelSelectionState ()
-//	{
-//		throw new System.NotImplementedException ();
-//	}
-//
-//	public void ToLevelStartState ()
-//	{
-//		Debug.Log("[LevelSelectionState] : Started Level");
-//		gameManager.GameViewUI.HideMainMenuContainer();
-//		gameManager.GameViewUI.HideLevelSelectionContainer();
-//
-//		gameManager.enemiesSpawner.SetEnemiesCount(LevelsManager.Instance.CurrentLevel.MaxEnemyCount);
-//		gameManager.enemiesSpawner.SetWavesCount(LevelsManager.Instance.CurrentLevel.WavesCount);
-//		gameManager.enemiesSpawner.SetLeveTimer(LevelsManager.Instance.CurrentLevel.LevelTime);
-//
-//		gameManager.AjustPlayerLives (gameManager.PlayerLivesMax - gameManager.PlayerLives);
-//
-//		gameManager.GameViewUI.ShowGameUIContainer();
-//		gameManager.GameViewUI.ShowBombContainer();
-//		gameManager.GameViewUI.UpdateEnemiesWaves (LevelsManager.Instance.CurrentLevel.WavesCount);
-//
-//		gameManager.enemiesSpawner.StartSpawnEnemies ();
-//
-//		gameManager.GameViewUI.GetComponent<Canvas> ().renderMode = RenderMode.ScreenSpaceCamera;
-//		gameManager.GameViewUI.GetComponent<Canvas> ().worldCamera = Camera.main;
-//
-//		BombManger.SetStartBombsCount (gameManager.PlayerBombsCount);
-//	}
-//
-//	public void ToLevelWinState ()
-//	{
-//		throw new System.NotImplementedException ();
-//	}
-//
-//	public void ToLevelLoseState ()
-//	{
-//		throw new System.NotImplementedException ();
-//	}
-//
-//	public void ToPauseState ()
-//	{
-//		throw new System.NotImplementedException ();
-//	}
-//
-//	public void ToResumeState ()
-//	{
-//		throw new System.NotImplementedException ();
-//	}
-//
-//	public void ToExitState()
-//	{
-//		Application.Quit();
-//	}
 }

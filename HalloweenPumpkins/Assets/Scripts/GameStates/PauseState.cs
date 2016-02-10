@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Pause Game State. Pause based on the Time.timeScale value.
+/// </summary>
 public class PauseState : IGameState
 {
 	public GameStatesManager gameManager;
