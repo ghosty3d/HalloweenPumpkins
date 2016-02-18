@@ -34,7 +34,7 @@ public static class Serializer
         }
         else
         {
-            Debug.LogError(path + " Not Exist");
+            //Debug.LogError(path + " Not Exist");
             return default(T);
         }
     }
@@ -46,12 +46,20 @@ public static class Serializer
     /// <param name="path"></param>
     public static void Serialize(object obj, string path)
     {
-        if (!File.Exists(path))
+		string l_Directory = Path.GetDirectoryName (path);
+		Debug.Log (Path.GetDirectoryName(path));
+
+		if (!Directory.Exists (path))
+		{
+			Directory.CreateDirectory (l_Directory);
+		}
+
+		if (!File.Exists(path))
         {
             using (StreamWriter sw = File.CreateText(path));
-#if UNITY_EDITOR
+			#if UNITY_EDITOR
             UnityEditor.AssetDatabase.Refresh();
-#endif
+			#endif
         }
 
         using (StreamWriter sw = new StreamWriter(path))
