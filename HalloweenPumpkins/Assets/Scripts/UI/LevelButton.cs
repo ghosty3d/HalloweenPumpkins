@@ -35,28 +35,31 @@ public class LevelButton : MonoBehaviour
 		}
 	}
 
-	public void GetLevelData(Level _level)
+    public void GetLevelData(Level _level)
     {
-		//ID
-		LevelID = _level.ID;
-		ButtonText.text = _level.ID.ToString();
+        //ID
+        LevelID = _level.ID;
+        ButtonText.text = _level.ID.ToString();
 
-		//Locked
-		if (_level.isLocked)
-		{
-			lockIcon.enabled = true;
-			button.interactable = false;
-		}
-		else
-		{
-			lockIcon.enabled = false;
-			button.interactable = true;
-		}
+        //Locked
+        if (_level.isLocked)
+        {
+            lockIcon.enabled = true;
+            button.interactable = false;
+        }
+        else
+        {
+            lockIcon.enabled = false;
+            button.interactable = true;
+        }
 
-		//Stars
-		for (int i = 0; i < _level.Stars; i++)
-		{
-			LevelStars[i].SetActive(true);
-		}
+        //Stars
+        if (LevelsManager.Instance.userProgress.ContainsKey(LevelID))
+        {
+            for (int i = 0; i < LevelsManager.Instance.userProgress[LevelID]; i++)
+            {
+                LevelStars[i].SetActive(true);
+            }
+        }
     }
 }

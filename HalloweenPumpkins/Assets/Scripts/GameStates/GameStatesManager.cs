@@ -108,11 +108,24 @@ public class GameStatesManager : MonoBehaviour
 
 		//Update Model Data
 		levelManager.CurrentLevel.Stars = rank;
+        if (LevelsManager.Instance.userProgress.ContainsKey(levelManager.CurrentLevel.ID))
+        {
+            if (LevelsManager.Instance.userProgress[levelManager.CurrentLevel.ID] < levelManager.CurrentLevel.Stars)
+            {
+                LevelsManager.Instance.userProgress[levelManager.CurrentLevel.ID] = levelManager.CurrentLevel.Stars;
+            }
+        }
+        else
+        {
+            LevelsManager.Instance.userProgress.Add(levelManager.CurrentLevel.ID, levelManager.CurrentLevel.Stars);
+        }
+
+        ConfigManager.SaveUserProgress(LevelsManager.Instance.userProgress);
 	}
 
 	public void GoToMainMenu()
 	{
-        ConfigManager.SaveLevelStorage(LevelsManager.Instance.levelStorage);
+       // ConfigManager.SaveLevelStorage(LevelsManager.Instance.levelStorage);
         levelLoseState.DisableState ();
 		levelWonState.DisableState ();
 		pauseState.DisableState ();
