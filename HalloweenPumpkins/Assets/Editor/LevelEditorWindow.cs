@@ -7,9 +7,7 @@ using System.Collections.Generic;
 
 public class LevelEditorWindow : EditorWindow
 {
-    public static string configPath = Application.dataPath + "/Config/level.json";
-
-    public LevelStorage levelStorage;
+    public static LevelStorage levelStorage;
     public Level newLevel;
     public int selectedLevelId = 0;
 
@@ -18,33 +16,25 @@ public class LevelEditorWindow : EditorWindow
     {
         // Get existing open window or if none, make a new one:
         LevelEditorWindow window = (LevelEditorWindow)EditorWindow.GetWindow(typeof(LevelEditorWindow));
+		window.autoRepaintOnSceneChange = true;
         window.Show();
-
     }
 
     void OnGUI()
     {
-        if (GUILayout.Button("Load Config", GUILayout.ExpandWidth(true), GUILayout.Height(32)))
-        {
-            levelStorage = Serializer.Deserialize<LevelStorage>(configPath);
-			newLevel = levelStorage.levelsList [0];
-			Repaint ();
-        }
+		if (levelStorage == null)
+		{
+			levelStorage = GameObject.FindObjectOfType<LevelsManager> ().levelStorage;
+		}
 
-        EditorGUILayout.Space();
+		EditorGUILayout.Space();
 
-        if (GUILayout.Button("Create New Level", GUILayout.ExpandWidth(true), GUILayout.Height(32)))
-        {
-            levelStorage = Serializer.Deserialize<LevelStorage>(configPath);
-        }
+		GUILayout.Label("Level Edit and Creation:", EditorStyles.boldLabel);
 
-        GUILayout.Label("Levels List: ");
-
-        if (levelStorage == null)
-        {
-            levelStorage = new LevelStorage();
-            levelStorage.levelsList = new List<Level>();
-        }
+		if (levelStorage != null && levelStorage.LevelsCount > 0)
+		{
+			GUILayout.Label(string.Format("Selected Level: {0} / {1}", selectedLevelId + 1, levelStorage.LevelsCount));
+		}
 
 		GUILayout.BeginHorizontal();
 
@@ -79,13 +69,51 @@ public class LevelEditorWindow : EditorWindow
 
         EditorGUILayout.Space();
 
+		if (GUILayout.Button("Create New Level", GUILayout.ExpandWidth(true), GUILayout.Height(32)))
+		{
+			if (levelStorage.LevelsCount == 0)
+			{
+				selectedLevelId = 0;
+			}
+			else
+			{
+				selectedLevelId = levelStorage.LevelsCount;
+			}
+
+			newLevel = new Level(selectedLevelId, 10, 1, 1, 3, false, 0);
+			levelStorage.AddNewLevel (newLevel);
+		}
+
+		if (GUILayout.Button("Delete Selected Level", GUILayout.ExpandWidth(true), GUILayout.Height(32)))
+		{
+			levelStorage.DeleteLevelById (selectedLevelId);
+
+			if (selectedLevelId > 0) 
+			{
+				selectedLevelId--;
+			}
+		}
+
+		EditorGUILayout.Space();
+
         if (levelStorage != null)
         {
-            if (GUILayout.Button("Update Config", GUILayout.ExpandWidth(true), GUILayout.Height(32)))
+			GUILayout.Label("Get Data From JSON Config to Level Storage:", EditorStyles.boldLabel);
+
+			if (GUILayout.Button("Update Level Storage", GUILayout.ExpandWidth(true), GUILayout.Height(32)))
+			{
+				levelStorage = ConfigManager.GetLevelStorage();
+				GameObject.FindObjectOfType<LevelsManager> ().levelStorage = levelStorage;
+			}
+
+			GUILayout.Label("Set Data From Level Storage to JSON Config:", EditorStyles.boldLabel);
+
+			if (GUILayout.Button("Update JSON Config", GUILayout.ExpandWidth(true), GUILayout.Height(32)))
             {
-                Serializer.Serialize(levelStorage, configPath);
-                AssetDatabase.Refresh();
+				ConfigManager.SaveLevelStorage(levelStorage);
             }
+
+			GUILayout.Label(string.Format("JSON Config stored in:\n{0}\n", ConfigManager.ConfigPath));
         }
 
     }

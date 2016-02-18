@@ -5,7 +5,7 @@ public static class ConfigManager
 {
     private static string _configPath;
 
-    private static string ConfigPath
+	public static string ConfigPath
     {
         get
         {
