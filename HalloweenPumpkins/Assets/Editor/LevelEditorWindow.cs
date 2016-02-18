@@ -116,6 +116,13 @@ public class LevelEditorWindow : EditorWindow
 			GUILayout.Label(string.Format("JSON Config stored in:\n{0}\n", ConfigManager.ConfigPath));
         }
 
+		EditorGUILayout.Space();
+
+		if (GUILayout.Button("Open Config Folder", GUILayout.ExpandWidth(true), GUILayout.Height(32)))
+		{
+			EditorUtility.RevealInFinder (Path.GetDirectoryName(ConfigManager.ConfigPath));
+		}
+
     }
 
     void DrawLevelInfo()
