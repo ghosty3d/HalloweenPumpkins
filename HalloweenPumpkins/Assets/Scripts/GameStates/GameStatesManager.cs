@@ -63,7 +63,7 @@ public class GameStatesManager : MonoBehaviour
 	void Start ()
 	{
 		enemiesSpawner = EnemiesSpawner.Instance;
-		GoToMainMenu();
+		//GoToMainMenu();
 	}
 
 	void Update()

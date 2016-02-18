@@ -16,7 +16,9 @@ public class LevelSelectionState : IGameState
 
 	public void EnableState ()
 	{       
+		#if UNITY_EDITOR
 		Debug.Log ("Now current state is :" + this.GetType());
+		#endif
 
 		if (!gameManager.GameViewUI.LevelSelectionContainer.activeInHierarchy)
         {

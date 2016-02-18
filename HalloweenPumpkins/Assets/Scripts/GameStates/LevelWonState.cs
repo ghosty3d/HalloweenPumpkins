@@ -15,6 +15,10 @@ public class LevelWonState : IGameState
 
 	public void EnableState ()
 	{
+		#if UNITY_EDITOR
+		Debug.Log ("Now current state is :" + this.GetType());
+		#endif
+
 		if(!gameManager.GameViewUI.EndLevelContainer.activeInHierarchy)
 		{
 			gameManager.GameViewUI.ShowEndLevelContainer (true);

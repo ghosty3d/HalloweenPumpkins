@@ -15,7 +15,9 @@ public class MainMenuState : IGameState
 
 	public void EnableState ()
 	{
+		#if UNITY_EDITOR
 		Debug.Log ("Now current state is :" + this.GetType());
+		#endif
 
 		if(!gameManager.GameViewUI.MainMenuContainer.gameObject.activeInHierarchy)
 		{
