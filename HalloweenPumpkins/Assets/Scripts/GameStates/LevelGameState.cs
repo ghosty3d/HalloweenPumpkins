@@ -40,7 +40,6 @@ public class LevelGameState : IGameState
 
 		gameManager.enemiesSpawner.SetEnemiesCount(gameManager.levelManager.CurrentLevel.MaxEnemyCount);
 		gameManager.enemiesSpawner.SetWavesCount(gameManager.levelManager.CurrentLevel.WavesCount);
-		gameManager.enemiesSpawner.SetLeveTimer(gameManager.levelManager.CurrentLevel.LevelTime);
 		gameManager.enemiesSpawner.StartSpawnEnemies ();
 	}
 

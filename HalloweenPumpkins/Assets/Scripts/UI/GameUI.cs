@@ -15,7 +15,6 @@ public class GameUI : MonoBehaviour
 	public GameObject BombContainer;
 	public GameObject RulesContainer;
 
-	public Text TimerText;
 	public Text PlayerLivesText;
 	public Text EnemiesWavesText;
 	public Text BombsCountText;
@@ -23,21 +22,6 @@ public class GameUI : MonoBehaviour
 	void Awake()
 	{
 		Instance = this;
-	}
-
-	//SetTimer
-	public void SetTimer(int seconds)
-	{
-		seconds = Mathf.Clamp (seconds, 0, seconds);
-
-		if(seconds > 9)
-		{
-			TimerText.text = "0:" + seconds.ToString();
-		}
-		else
-		{
-			TimerText.text = "0:0" + seconds.ToString();
-		}
 	}
 
 	//Main Menu

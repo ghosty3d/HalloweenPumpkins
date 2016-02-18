@@ -5,7 +5,6 @@ using System.Collections;
 public class Level
 {
 	public int ID;
-	public int LevelTime;
 	public int WavesCount;
 
 	public int MinEnemyCount;
@@ -18,7 +17,6 @@ public class Level
 	public Level(int id, int levelTime, int wavesCount, int minEnemyCount, int maxEnemyCount, bool locked, int stars)
 	{
 		ID = id;
-		LevelTime = levelTime;
 		WavesCount = wavesCount;
 		MinEnemyCount = minEnemyCount;
 		MaxEnemyCount = maxEnemyCount;

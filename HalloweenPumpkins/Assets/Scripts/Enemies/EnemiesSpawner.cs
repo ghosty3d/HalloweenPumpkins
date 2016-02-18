@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class EnemiesSpawner : MonoBehaviour
 {
@@ -13,10 +14,16 @@ public class EnemiesSpawner : MonoBehaviour
 	public int WavesCount;
 	public int EnemiesInWave;
 	public float EnemySpawnTimer;
+    public int timeBetwenEnemySpawnMin = 750;
+    public int timeBetwenEnemySpawnMax = 2500;
+    public int timerBetwenWaves;
+    public int timeBetwenWawesMin = 1;
+    public int timeBetwenWawesMax = 3;
 
-	public int LevelTimer = 60;
 
-	private GameObject newEnenmy;
+
+
+    private GameObject newEnenmy;
 	[SerializeField]
 	private bool spawnMore = true;
 
@@ -42,32 +49,7 @@ public class EnemiesSpawner : MonoBehaviour
 		WavesCount = wavesCount;
 	}
 
-	//Set Level Timer
-	public void SetLeveTimer(int timer)
-	{
-		LevelTimer = timer;
-		GameStatesManager.Instance.GameViewUI.SetTimer (LevelTimer);
-	}
-
-	IEnumerator StartTimer()
-	{
-		while(LevelTimer > 0)
-		{
-			LevelTimer--;
-			Debug.Log ("Timer");
-			GameStatesManager.Instance.GameViewUI.SetTimer(LevelTimer);
-			yield return new WaitForSeconds(1f);
-		}
-
-		GameStatesManager.Instance.GoToWonState();
-	}
-
-	public void StopTimer()
-	{
-		StopCoroutine ("StartTimer");
-		GameStatesManager.Instance.GameViewUI.SetTimer (0);
-	}
-
+	
 	/// <summary>
 	/// Starts the spawn enemies. Can be used form the outside.
 	/// </summary>
@@ -75,7 +57,6 @@ public class EnemiesSpawner : MonoBehaviour
 	{
 		spawnMore = true;
 		StartCoroutine(SpawnNewEnemy());
-		StartCoroutine(StartTimer());
 	}
 
 	/// <summary>
@@ -98,15 +79,23 @@ public class EnemiesSpawner : MonoBehaviour
 					if(!EnemiesPool[i].activeInHierarchy)
 					{
 						EnemiesPool[i].SetActive(true);
-						EnemiesPool[i].transform.position = new Vector3(Random.Range(-2f, 2f), 5f, 0f);
-						yield return new WaitForSeconds(EnemySpawnTimer);
+						EnemiesPool[i].transform.position = new Vector3(UnityEngine.Random.Range(-2f, 2f), 5f, 0f);
+                        System.Random prngEnemies = new System.Random();
+                        EnemySpawnTimer = prngEnemies.Next(timeBetwenEnemySpawnMin, timeBetwenEnemySpawnMax)*0.5f;
+                        Debug.Log(string.Format("<color=blue>EnemySpawnTimer: {0}</color>", EnemySpawnTimer));
+
+                        yield return new WaitForSeconds(EnemySpawnTimer);
 					}
 				}
-				
-				yield return new WaitForSeconds(LevelTimer / (WavesCount + 1));
+                
+
+                System.Random prng = new System.Random();
+                timerBetwenWaves = prng.Next(timeBetwenWawesMin, timeBetwenWawesMax);
+                Debug.Log(string.Format("<color=red>timerBetwenWaves: {0}</color>", timerBetwenWaves));
+                yield return new WaitForSeconds(timerBetwenWaves);
 				WavesCount--;
 				GameStatesManager.Instance.GameViewUI.UpdateEnemiesWaves (WavesCount);
-				SetEnemiesCount(Random.Range(4, 9));
+				SetEnemiesCount(UnityEngine.Random.Range(4, 9));
 			}
 			else
 			{

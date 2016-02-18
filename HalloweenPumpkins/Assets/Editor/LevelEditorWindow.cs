@@ -123,7 +123,6 @@ public class LevelEditorWindow : EditorWindow
         if (newLevel != null)
         {
             newLevel.ID = EditorGUILayout.IntField(string.Format("Level ID:\t\t\t"), newLevel.ID);
-            newLevel.LevelTime = EditorGUILayout.IntField(string.Format("Level Time:\t\t"), newLevel.LevelTime);
             newLevel.WavesCount = EditorGUILayout.IntField(string.Format("Level WavesCount:\t\t"), newLevel.WavesCount);
             newLevel.MinEnemyCount = EditorGUILayout.IntField(string.Format("Level MinEnemyCount:\t"), newLevel.MinEnemyCount);
             newLevel.MaxEnemyCount = EditorGUILayout.IntField(string.Format("Level MaxEnemyCount:\t"), newLevel.MaxEnemyCount);
