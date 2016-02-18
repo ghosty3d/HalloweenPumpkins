@@ -35,6 +35,7 @@ public static class ConfigManager
 		if (l_LevelStorage == null) 
 		{
 			CreateInitialConfig (LevelsManager.Instance.levelStorage);
+			l_LevelStorage = Serializer.Deserialize<LevelStorage>(ConfigPath);
 		}
 
 		return l_LevelStorage;
