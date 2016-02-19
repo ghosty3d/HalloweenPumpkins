@@ -7,14 +7,6 @@ public class Enemy : MonoBehaviour
 {
 	public Transform enemyTransform;
 
-	public float SlideSpeed;
-	public float MoveSpeed;
-
-	public IEnemyState currentSate;
-
-	public IEnemyState runSate;
-	public IEnemyState dieSate;
-
 	public enum EnemiesTypes
 	{
 		Pumpkin,
@@ -24,6 +16,15 @@ public class Enemy : MonoBehaviour
 
 	public EnemiesTypes CurrentEnemyType;
 
+	public float spawnedPosX = 0;
+
+	private float amplitudeX = 0.02f;
+	private float frequency = 2.5f;
+	public float fallingSpeed;
+
+	private float xMovementPosition;
+	private float yMovementPosition;
+
 	public float UntouchableChanse;
 
 	public Color EnemyColor;
@@ -32,8 +33,6 @@ public class Enemy : MonoBehaviour
 	private MeshFilter enemyMeshFilter;
 	private MeshRenderer enemyMeshRenderer;
 
-	public float spawnedX;
-
 	public bool Clicked = false;
 
 	void Awake()
@@ -41,47 +40,40 @@ public class Enemy : MonoBehaviour
 		enemyTransform = transform;
 		enemyMeshFilter = GetComponent<MeshFilter> ();
 		enemyMeshRenderer = GetComponent<MeshRenderer>();
-
-		runSate = new EnemyRunState(this);
 	}
 
 	void OnEnable()
 	{
-		currentSate = runSate;
 		Clicked = false;
-		SlideSpeed = Random.Range(0.25f, 2f);
-		//MoveSpeed = Random.Range(0.75f, 1f);
 
-		spawnedX = enemyTransform.position.x;
+		System.Random prng = new System.Random ();
 
-		ChangeEnemyType();
-	}
+		prng = new System.Random ();
+		fallingSpeed = prng.Next (150, 300) * 0.01f;
 
-	void Start ()
-	{
-		currentSate = runSate;
+		prng = new System.Random ();
+		spawnedPosX = prng.Next (-150, 150) * 0.01f;
+		enemyTransform.position = new Vector3 (spawnedPosX, 5f, 0);
+
+		ChangeEnemyType ();
 	}
 
 	void Update ()
 	{
-		currentSate.UpdateState();
-	}
+		//x = a + b * sin(c * y + d);
 
-//	public void OnPointerClick (PointerEventData eventData)
-//	{
-//		eventData.selectedObject = gameObject;
-//		Debug.Log("Click: " + eventData.selectedObject.name);
-//		ParticlesManager.Instance.PlaceAndPlayParticles(eventData.selectedObject.transform.position, EnemyColor);
-//		gameObject.SetActive(false);
-//	}
+		xMovementPosition = enemyTransform.position.x + amplitudeX * Mathf.Sin (frequency * enemyTransform.position.y + Time.time);
+		yMovementPosition = enemyTransform.position.y - Time.deltaTime * fallingSpeed;
+		enemyTransform.position = new Vector3(xMovementPosition, yMovementPosition, 0f);
+	}
 
 	void OnMouseDown()
 	{
-		if (GameStatesManager.Instance.currentGameState == GameStatesManager.Instance.levelGameState) {
-			Debug.Log ("Click: " + transform.name);
+		if (GameStatesManager.Instance.currentGameState == GameStatesManager.Instance.levelGameState)
+		{
 			Clicked = true;
 			ParticlesManager.Instance.PlaceAndPlayParticles (transform.position, EnemyColor);
-			gameObject.SetActive (false);	
+			gameObject.SetActive (false);
 		}
 		else
 		{
@@ -91,13 +83,16 @@ public class Enemy : MonoBehaviour
 
 	void ChangeEnemyType()
 	{
-		float chanse = Random.Range(0, 100) + UntouchableChanse;
+		System.Random prng = new System.Random ();
+		int enemyTypeRange = prng.Next(0, 100);
 
-		if(chanse > 95f && chanse < 100f)
+		Debug.Log (string.Format("<color=cyan>Chance: {0}</color>", enemyTypeRange));
+
+		if(enemyTypeRange > 90f && enemyTypeRange < 100f)
 		{
 			CurrentEnemyType = EnemiesTypes.Ghost;
 		}
-		else if(chanse > 66f && chanse < 95f)
+		else if(enemyTypeRange > 66f && enemyTypeRange <= 90f)
 		{
 			CurrentEnemyType = EnemiesTypes.PumpkinTall;
 		}
@@ -105,7 +100,6 @@ public class Enemy : MonoBehaviour
 		{
 			CurrentEnemyType = EnemiesTypes.Pumpkin;
 		}
-
 
 		switch(CurrentEnemyType)
 		{

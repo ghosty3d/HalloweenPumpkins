@@ -17,6 +17,7 @@ public class GameUI : MonoBehaviour
 
 	public Text PlayerLivesText;
 	public Text EnemiesWavesText;
+	public Text WaveNumberLabel;
 	public Text BombsCountText;
 
 	void Awake()
@@ -108,6 +109,8 @@ public class GameUI : MonoBehaviour
 	public void UpdateEnemiesWaves(int waves)
 	{
 		EnemiesWavesText.text = "Enemies Waves: " + waves.ToString();
+		WaveNumberLabel.gameObject.SetActive (true);
+		WaveNumberLabel.text = string.Format ("Wave Number {0}", waves);
 	}
 
 	public void UpdateBombsCount(int count)
