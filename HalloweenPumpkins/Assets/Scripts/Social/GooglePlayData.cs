@@ -24,7 +24,47 @@
 
 public static class GooglePlayData
 {
-        public const string achievement_hit_5_pumpkins = "CgkIt4fxz70aEAIQAA"; // <GPGSID>
+        public const string achievement_ghostbuster_lv11 = "CgkIt4fxz70aEAIQFQ"; // <GPGSID>
+        public const string achievement_ghostbuster_lv12 = "CgkIt4fxz70aEAIQFg"; // <GPGSID>
+        public const string achievement_ghostbuster_lv13 = "CgkIt4fxz70aEAIQFw"; // <GPGSID>
+        public const string achievement_ghostbuster_lv15 = "CgkIt4fxz70aEAIQGQ"; // <GPGSID>
+        public const string achievement_ghostbuster_lv16 = "CgkIt4fxz70aEAIQGg"; // <GPGSID>
+        public const string achievement_ghostbuster_lv17 = "CgkIt4fxz70aEAIQGw"; // <GPGSID>
+        public const string achievement_ghostbuster_lv19 = "CgkIt4fxz70aEAIQHQ"; // <GPGSID>
+        public const string achievement_lord_of_the_pumpkins_lv10 = "CgkIt4fxz70aEAIQKQ"; // <GPGSID>
+        public const string achievement_use_20_bombs = "CgkIt4fxz70aEAIQAg"; // <GPGSID>
+        public const string achievement_ghostbuster_lv1 = "CgkIt4fxz70aEAIQCw"; // <GPGSID>
+        public const string achievement_ghostbuster_lv2 = "CgkIt4fxz70aEAIQDA"; // <GPGSID>
+        public const string achievement_ghostbuster_lv3 = "CgkIt4fxz70aEAIQDQ"; // <GPGSID>
+        public const string achievement_ghostbuster_lv4 = "CgkIt4fxz70aEAIQDg"; // <GPGSID>
+        public const string achievement_ghostbuster_lv5 = "CgkIt4fxz70aEAIQDw"; // <GPGSID>
+        public const string achievement_ghostbuster_lv6 = "CgkIt4fxz70aEAIQEA"; // <GPGSID>
+        public const string achievement_ghostbuster_lv7 = "CgkIt4fxz70aEAIQEQ"; // <GPGSID>
+        public const string achievement_ghostbuster_lv8 = "CgkIt4fxz70aEAIQEg"; // <GPGSID>
+        public const string achievement_lord_of_the_pumpkins_lv1 = "CgkIt4fxz70aEAIQIA"; // <GPGSID>
+        public const string achievement_lord_of_the_pumpkins_lv2 = "CgkIt4fxz70aEAIQIQ"; // <GPGSID>
+        public const string achievement_lord_of_the_pumpkins_lv3 = "CgkIt4fxz70aEAIQIg"; // <GPGSID>
+        public const string achievement_lord_of_the_pumpkins_lv4 = "CgkIt4fxz70aEAIQIw"; // <GPGSID>
+        public const string achievement_lord_of_the_pumpkins_lv5 = "CgkIt4fxz70aEAIQJA"; // <GPGSID>
+        public const string achievement_ghostbuster_lv20 = "CgkIt4fxz70aEAIQHg"; // <GPGSID>
+        public const string achievement_ghostbuster_lv21 = "CgkIt4fxz70aEAIQHw"; // <GPGSID>
+        public const string achievement_lord_of_the_pumpkins_lv8 = "CgkIt4fxz70aEAIQJw"; // <GPGSID>
+        public const string achievement_use_10_bombs = "CgkIt4fxz70aEAIQAQ"; // <GPGSID>
+        public const string achievement_ghostbuster_lv_14 = "CgkIt4fxz70aEAIQGA"; // <GPGSID>
+        public const string achievement_ghostbusters_lv18 = "CgkIt4fxz70aEAIQHA"; // <GPGSID>
+        public const string achievement_use_60_bombs = "CgkIt4fxz70aEAIQBg"; // <GPGSID>
+        public const string achievement_gostbuster_lv9 = "CgkIt4fxz70aEAIQEw"; // <GPGSID>
+        public const string achievement_use_100_bombs = "CgkIt4fxz70aEAIQCg"; // <GPGSID>
+        public const string achievement_use_90_bombs = "CgkIt4fxz70aEAIQCQ"; // <GPGSID>
+        public const string achievement_use_80_bombs = "CgkIt4fxz70aEAIQCA"; // <GPGSID>
+        public const string achievement_use_50_bombs = "CgkIt4fxz70aEAIQBQ"; // <GPGSID>
+        public const string achievement_use_40_bombs = "CgkIt4fxz70aEAIQBA"; // <GPGSID>
+        public const string achievement_lord_of_the_pumpkins_lv6 = "CgkIt4fxz70aEAIQJQ"; // <GPGSID>
+        public const string achievement_lord_of_the_pumpkins_lv7 = "CgkIt4fxz70aEAIQJg"; // <GPGSID>
+        public const string achievement_lord_of_the_pumpkins_lv9 = "CgkIt4fxz70aEAIQKA"; // <GPGSID>
+        public const string achievement_use_70_bombs = "CgkIt4fxz70aEAIQBw"; // <GPGSID>
+        public const string achievement_use_30_bombs = "CgkIt4fxz70aEAIQAw"; // <GPGSID>
+        public const string achievement_ghostbuster_lv10 = "CgkIt4fxz70aEAIQFA"; // <GPGSID>
 
 }
 
