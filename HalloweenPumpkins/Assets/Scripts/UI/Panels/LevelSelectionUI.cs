@@ -6,7 +6,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Class for view of Level Selection panel.
 /// </summary>
-public class LevelSelectionUI : MonoBehaviour
+public class LevelSelectionUI : StateUI
 {
 	public static LevelSelectionUI Instance;
 
@@ -19,6 +19,7 @@ public class LevelSelectionUI : MonoBehaviour
 	void Awake()
 	{
 		Instance = this;
+		base.canvasGroup = GetComponent<CanvasGroup> ();
 	}
 
 	public void SetLevelButtons()
@@ -36,8 +37,6 @@ public class LevelSelectionUI : MonoBehaviour
 		{
 			for(int i = 0; i < LevelsManager.Instance.levelStorage.LevelsCount; i++)
 			{
-				Debug.Log ("Stars: " + LevelsManager.Instance.levelStorage.levelsList[i].ID);
-
 				GameObject newLvlButton = Instantiate(LevelButton);
 				newLvlButton.transform.SetParent(Grid.transform);
 				newLvlButton.transform.localScale = Vector3.one;

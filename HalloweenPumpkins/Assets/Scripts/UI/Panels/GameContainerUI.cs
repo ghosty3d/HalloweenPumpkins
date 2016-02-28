@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class GameContainerUI : MonoBehaviour
+public class GameContainerUI : StateUI
 {
 	
 }

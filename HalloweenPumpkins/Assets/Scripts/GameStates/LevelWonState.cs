@@ -19,13 +19,11 @@ public class LevelWonState : IGameState
 		Debug.Log ("Now current state is :" + this.GetType());
 		#endif
 
-		if(!gameManager.GameViewUI.EndLevelContainer.activeInHierarchy)
-		{
-			gameManager.GameViewUI.ShowEndLevelContainer (true);
-		}
+		gameManager.GameViewUI.ShowEndLevelContainer (true);
 
 		gameManager.GetNewLevelRank ();
-		gameManager.enemiesSpawner.StopEnemiesAndHide ();
+
+		ConfigManager.SaveUserProgress (LevelsManager.Instance.userProgress);
 	}
 
 	public void UpdateState ()
@@ -35,11 +33,6 @@ public class LevelWonState : IGameState
 
 	public void DisableState ()
 	{
-		if(gameManager.GameViewUI.EndLevelContainer.activeInHierarchy)
-		{
-			gameManager.GameViewUI.HideEndLevelContainer ();
-		}
-
-		gameManager.enemiesSpawner.StopEnemiesAndHide ();
+		gameManager.GameViewUI.HideEndLevelContainer ();
 	}
 }

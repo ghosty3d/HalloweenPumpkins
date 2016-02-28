@@ -7,13 +7,14 @@ public class GameUI : MonoBehaviour
 	public static GameUI Instance;
 
 	//Containers
-	public GameObject MainMenuContainer;
-	public GameObject LevelSelectionContainer;
-	public GameObject GameUIContainer;
-	public GameObject PauseContainer;
-	public GameObject EndLevelContainer;
-	public GameObject BombContainer;
-	public GameObject RulesContainer;
+	public StateUI MainMenuContainer;
+	public StateUI LevelSelectionContainer;
+	public StateUI GameUIContainer;
+	public StateUI PauseContainer;
+	public StateUI EndLevelContainer;
+	public StateUI BombContainer;
+	public StateUI RulesContainer;
+	public StateUI OptionsContainer;
 
 	public Text PlayerLivesText;
 	public Text EnemiesWavesText;
@@ -39,41 +40,53 @@ public class GameUI : MonoBehaviour
 	//Level Selection
 	public void ShowLevelSelectionContainer()
 	{
-		LevelSelectionContainer.SetActive(true);
+		LevelSelectionContainer.SetActive (true);
         LevelSelectionUI.Instance.SetLevelButtons();
 	}
 	
 	public void HideLevelSelectionContainer()
 	{
-		LevelSelectionContainer.SetActive(false);
+		LevelSelectionContainer.SetActive (false);
 	}
 
 	//Game View
 	public void ShowGameUIContainer()
 	{
-		GameUIContainer.SetActive(true);
+		GameUIContainer.SetActive (true);
 	}
 	
 	public void HideGameUIContainer()
 	{
-		GameUIContainer.SetActive(false);
+		GameUIContainer.SetActive (false);
 	}
 
 	//Pause
 	public void ShowPauseContainer()
 	{
-		PauseContainer.SetActive(true);
+		PauseContainer.SetActive (true);
 	}
 	
 	public void HidePauseContainer()
 	{
-		PauseContainer.SetActive(false);
+		PauseContainer.SetActive (false);
+	}
+
+	//Options
+	public void ShowOptionsContainer()
+	{
+		OptionsContainer.SetActive (true);
+	}
+
+	public void HideOptionsContainer()
+	{
+		OptionsContainer.SetActive (false);
 	}
 
 	//End Level
 	public void ShowEndLevelContainer(bool isWin)
 	{
-		EndLevelContainer.SetActive(true);
+		EndLevelContainer.SetActive (true);
+
 		if (isWin)
 		{
 			LevelEndUI.Instance.Title.text = "You won this level!";	
@@ -86,7 +99,7 @@ public class GameUI : MonoBehaviour
 
 	public void HideEndLevelContainer()
 	{
-		EndLevelContainer.SetActive(false);
+		EndLevelContainer.SetActive (false);
 	}
 
 	//Bombs
@@ -137,6 +150,18 @@ public class GameUI : MonoBehaviour
 		{
 			LevelEndUI.Instance.Stars [i].SetActive (true);
 		}
+	}
+
+	public void ExitGame()
+	{
+		Application.Quit ();
+
+		#if UNITY_EDITOR
+		if(UnityEditor.EditorApplication.isPlaying)
+		{
+			UnityEditor.EditorApplication.isPaused = true;
+		}
+		#endif
 	}
 
 }

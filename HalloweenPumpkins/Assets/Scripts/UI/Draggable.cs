@@ -27,7 +27,8 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 			Vector3 offset = new Vector3 (0f, 0f, 10f);
 			Vector3 pos = Camera.main.ScreenToWorldPoint (eventData.position) + offset;
 
-			GameObject Bomd = Instantiate (BombPrefab, pos, Quaternion.identity) as GameObject;
+			GameObject l_BombIstance = Instantiate (BombPrefab, pos, Quaternion.identity) as GameObject;
+			l_BombIstance.name = "Bomb";
 
 			BombManger.RemoveBombs (1);
 

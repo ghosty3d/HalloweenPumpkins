@@ -20,10 +20,7 @@ public class LevelSelectionState : IGameState
 		Debug.Log ("Now current state is :" + this.GetType());
 		#endif
 
-		if (!gameManager.GameViewUI.LevelSelectionContainer.activeInHierarchy)
-        {
-            gameManager.GameViewUI.ShowLevelSelectionContainer();
-        }
+		gameManager.GameViewUI.ShowLevelSelectionContainer();
 	}
 
 	public void UpdateState ()
@@ -33,9 +30,6 @@ public class LevelSelectionState : IGameState
 
 	public void DisableState ()
 	{
-		if (gameManager.GameViewUI.LevelSelectionContainer.activeInHierarchy)
-		{
-			gameManager.GameViewUI.HideLevelSelectionContainer ();
-		}
+		gameManager.GameViewUI.HideLevelSelectionContainer ();
 	}
 }

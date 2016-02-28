@@ -19,13 +19,12 @@ public class MainMenuState : IGameState
 		Debug.Log ("Now current state is :" + this.GetType());
 		#endif
 
-		if(!gameManager.GameViewUI.MainMenuContainer.gameObject.activeInHierarchy)
-		{
-			gameManager.GameViewUI.ShowMainMenuContainer();
+		gameManager.GameViewUI.ShowMainMenuContainer();
+		gameManager.GameViewUI.GetComponent<Canvas> ().worldCamera = Camera.main;
+		gameManager.GameViewUI.GetComponent<Canvas> ().renderMode = RenderMode.ScreenSpaceOverlay;
 
-			gameManager.GameViewUI.GetComponent<Canvas> ().worldCamera = Camera.main;
-			gameManager.GameViewUI.GetComponent<Canvas> ().renderMode = RenderMode.ScreenSpaceOverlay;
-		}
+		//Audio
+		AudioManager.instance.PlayMainMenuMisuc();
 	}
 
 	public void UpdateState ()
@@ -35,14 +34,7 @@ public class MainMenuState : IGameState
 
 	public void DisableState ()
 	{
-		if(gameManager.GameViewUI.MainMenuContainer.gameObject.activeInHierarchy)
-		{
-			gameManager.GameViewUI.HideMainMenuContainer();
-		}
-
-		if (gameManager.GameViewUI.RulesContainer.activeInHierarchy)
-		{
-			gameManager.GameViewUI.RulesContainer.SetActive (false);
-		}
+		gameManager.GameViewUI.HideMainMenuContainer();
+		gameManager.GameViewUI.RulesContainer.SetActive (false);
 	}
 }

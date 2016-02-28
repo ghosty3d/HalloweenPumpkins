@@ -8,133 +8,110 @@ public class EnemiesSpawner : MonoBehaviour
 	public static EnemiesSpawner Instance;
 
 	public GameObject EnenmyPrefab;
-	public List<GameObject> EnemiesPool = new List<GameObject>();
 
-	//Waves
-	public int WavesCount;
+	public Level currentLevel;
 
-	//Enemies
-	private int enemiesInWave;
+	public List<LevelEnemiesWave> wavesList = new List<LevelEnemiesWave>();
 
-	public float EnemySpawnTimer;
-    public int timeBetwenEnemySpawnMin = 75;
-    public int timeBetwenEnemySpawnMax = 250;
+	public LevelEnemiesWave currentWave;
+	public int currentWaveNumber;
+
+	public int enemiesRemainingToSpawn;
+	public int enemiesRemainingAlive;
+	public float nextSpawnTime;
+    
     public int timerBetwenWaves;
     public int timeBetwenWawesMin = 1;
     public int timeBetwenWawesMax = 3;
 
-    private GameObject newEnenmy;
 	[SerializeField]
-	private bool spawnMore = true;
+	private int wavesCount;
 
+	private bool m_Initialized = false;
+	[SerializeField]
+	public List<GameObject> enemiesList = new List<GameObject> ();
+
+	private Vector3 newInitialPosition;
 
 	void Awake()
 	{
 		Instance = this;
 	}
 
-	void Start ()
+	void Update()
 	{
-		SpawnEnemies(enemiesInWave);
-	}
-
-	//Set Enemies count in Enemies Wave
-	public void SetEnemiesCount(int enemiesCount)
-	{
-		enemiesInWave = enemiesCount;
-	}
-
-	//Set Total Waves Count in selected Level
-	public void SetWavesCount(int wavesCount)
-	{
-		WavesCount = wavesCount;
-	}
-
-	
-	/// <summary>
-	/// Starts the spawn enemies. Can be used form the outside.
-	/// </summary>
-	public void StartSpawnEnemies()
-	{
-		spawnMore = true;
-		StartCoroutine(SpawnNewEnemy());
-	}
-
-	/// <summary>
-	/// Coroutine spawns the new enemies wave.
-	/// </summary>
-	/// <returns>The new enemy.</returns>
-	IEnumerator SpawnNewEnemy()
-	{
-		while(spawnMore)
+		if (m_Initialized)
 		{
-			if(WavesCount > 0)
+			if (enemiesRemainingToSpawn > 0 && Time.time > nextSpawnTime)
 			{
-				if(EnemiesPool.Count < enemiesInWave)
-				{
-					SpawnEnemies(Mathf.Abs(EnemiesPool.Count - enemiesInWave));
+				enemiesRemainingToSpawn--;
+				nextSpawnTime = Time.time + currentWave.timeBetweenSpawns;
+				System.Random prng = new System.Random ();
+				float l_RandomPosX = prng.Next (-15, 15) * 0.1f;
+				newInitialPosition = new Vector3 (l_RandomPosX, 6f, 0f);
+				GameObject newEnemy = ObjectPoolManager.instance.ReuseObject (EnenmyPrefab, newInitialPosition, Quaternion.Euler(0f, 180f, 0f));
+
+				if (!enemiesList.Contains (newEnemy)) {
+					enemiesList.Add (newEnemy);
 				}
-				
-				for(int i = 0; i < enemiesInWave; i++)
-				{
-					if(!EnemiesPool[i].activeInHierarchy)
-					{
-						EnemiesPool[i].SetActive(true);
-                        System.Random prngEnemies = new System.Random();
-						EnemySpawnTimer = prngEnemies.Next(timeBetwenEnemySpawnMin, timeBetwenEnemySpawnMax) * 0.01f;
-						#if UNITY_EDITOR
-						Debug.Log(string.Format("<color=blue>EnemySpawnTimer: {0}</color>", EnemySpawnTimer));
-						#endif
-
-                        yield return new WaitForSeconds(EnemySpawnTimer);
-					}
-				}
-                
-
-                System.Random prng = new System.Random();
-                timerBetwenWaves = prng.Next(timeBetwenWawesMin, timeBetwenWawesMax);
-				#if UNITY_EDITOR
-                Debug.Log(string.Format("<color=red>timerBetwenWaves: {0}</color>", timerBetwenWaves));
-				#endif
-                yield return new WaitForSeconds(timerBetwenWaves);
-				WavesCount--;
-				GameStatesManager.Instance.GameViewUI.UpdateEnemiesWaves (WavesCount);
-				prng = new System.Random();
-				SetEnemiesCount(prng.Next (LevelsManager.Instance.CurrentLevel.MinEnemyCount, LevelsManager.Instance.CurrentLevel.MaxEnemyCount));
 			}
-			else
-			{
-				GameStatesManager.Instance.GoToWonState ();
-                break;
-			}
-
 		}
 	}
 
-	/// <summary>
-	/// Spawns the enemies. And add them to Enemies ObjectPool.
-	/// </summary>
-	/// <param name="count">Count of enemies in ObjectPool.</param>
-	public void SpawnEnemies(int count)
-	{
-		if (EnenmyPrefab && count > 0)
-		{
-			for (int i = 0; i < count; i++)
-			{
-				newEnenmy = Instantiate (EnenmyPrefab);
-				newEnenmy.SetActive (false);
-				newEnenmy.name = EnenmyPrefab.name + "-" + (i + 1);
-				EnemiesPool.Add (newEnenmy);
+	public void InitializeEnemiesSpawner() {
+		Debug.Log ("Init Enemy Spawner!");
+		m_Initialized = true;
+		currentLevel = LevelsManager.Instance.CurrentLevel;
+		wavesList.AddRange(currentLevel.WavesList);
+		wavesCount = currentLevel.WavesCount;
+		NextWave ();
+
+		for (int i = 0; i < EnemiesSpawner.Instance.enemiesList.Count; i++) {
+			enemiesList [i].GetComponent<Enemy> ().shouldStop = false;
+		}
+	}
+
+	public void OnEnemyDeath() {
+		if (GameStatesManager.Instance.currentGameState == GameStatesManager.Instance.levelGameState) {
+			enemiesRemainingAlive --;
+			Debug.Log (string.Format("Wave: {0}, Enemies Remaining Alive: {1}", currentWaveNumber, enemiesRemainingAlive));
+			if (enemiesRemainingAlive == 0) {
+				NextWave();
 			}
 		}
-		else if (enemiesInWave <= 0)
+	}
+
+	void NextWave() {
+		currentWaveNumber++;
+		if (currentWaveNumber - 1 < wavesCount)
 		{
-			Debug.LogWarning ("EnemiesInWave is 0!");
+			GameStatesManager.Instance.GameViewUI.UpdateEnemiesWaves (currentWaveNumber);
+			currentWave = wavesList [currentWaveNumber - 1];
+			enemiesRemainingToSpawn = currentWave.enemiesInWave;
+			enemiesRemainingAlive = enemiesRemainingToSpawn;
+
+			if (ObjectPoolManager.instance.poolSize < enemiesRemainingToSpawn)
+			{
+				ObjectPoolManager.instance.CreatePool (EnenmyPrefab, enemiesRemainingToSpawn);
+			}
 		}
-		else
+		else if(currentWaveNumber - 1 == wavesList.Count && enemiesRemainingAlive == 0)
 		{
-			Debug.LogWarning ("EnenmyPrefab is not set properly!");
+			GameStatesManager.Instance.GoToWonState ();
 		}
+	}
+
+	public void ResetEnemiesSpawner()
+	{
+		m_Initialized = false;
+		currentLevel = null;
+		wavesList.Clear ();
+		currentWave = null;
+		currentWaveNumber = 0;
+		enemiesRemainingAlive = 0;
+		enemiesRemainingToSpawn = 0;
+		nextSpawnTime = 0;
+		StopEnemiesAndHide ();
 	}
 
 	/// <summary>
@@ -142,15 +119,13 @@ public class EnemiesSpawner : MonoBehaviour
 	/// </summary>
 	public void StopEnemiesAndHide()
 	{
-		spawnMore = false;
-		StopAllCoroutines ();
-
-		for (int i = 0; i < EnemiesPool.Count; i++) 
-		{
-			if (EnemiesPool [i].activeInHierarchy)
-			{
-				EnemiesPool [i].SetActive (false);
-			}		
+		for (int i = 0; i < enemiesList.Count; i++) {
+			Debug.Log (string.Format("<color=red>Enemy {0} set false</color>", enemiesList[i].name));
+			enemiesList [i].SetActive (false);
 		}
+
+		enemiesList.Clear ();
+
+		ObjectPoolManager.instance.DeactivatePoolObjects ();
 	}
 }

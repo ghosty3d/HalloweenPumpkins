@@ -5,6 +5,11 @@ using System.Collections.Generic;
 
 public class Enemy : MonoBehaviour
 {
+	public bool shouldStop = false;
+	public bool clicked = false;
+	public bool explosed = false;
+	public bool exit = false;
+
 	public Transform enemyTransform;
 
 	public enum EnemiesTypes
@@ -33,7 +38,7 @@ public class Enemy : MonoBehaviour
 	private MeshFilter enemyMeshFilter;
 	private MeshRenderer enemyMeshRenderer;
 
-	public bool Clicked = false;
+	public event System.Action OnDeath;
 
 	void Awake()
 	{
@@ -44,7 +49,9 @@ public class Enemy : MonoBehaviour
 
 	void OnEnable()
 	{
-		Clicked = false;
+		clicked = false;
+		explosed = false;
+		exit = false;
 
 		System.Random prng = new System.Random ();
 
@@ -62,22 +69,28 @@ public class Enemy : MonoBehaviour
 	{
 		//x = a + b * sin(c * y + d);
 
-		xMovementPosition = enemyTransform.position.x + amplitudeX * Mathf.Sin (frequency * enemyTransform.position.y + Time.time);
+		xMovementPosition = enemyTransform.position.x + amplitudeX * Mathf.Sin (frequency * enemyTransform.position.y + Time.deltaTime);
 		yMovementPosition = enemyTransform.position.y - Time.deltaTime * fallingSpeed;
-		enemyTransform.position = new Vector3(xMovementPosition, yMovementPosition, 0f);
+
+		if (!shouldStop) {
+			enemyTransform.position = new Vector3(xMovementPosition, yMovementPosition, 0f);
+		}
 	}
 
 	void OnMouseDown()
 	{
 		if (GameStatesManager.Instance.currentGameState == GameStatesManager.Instance.levelGameState)
 		{
-			Clicked = true;
+			clicked = true;
 			ParticlesManager.Instance.PlaceAndPlayParticles (transform.position, EnemyColor);
+			Debug.Log (string.Format("<color=magenta>{0} was killed by click!</color>", gameObject.name));
 			gameObject.SetActive (false);
-		}
-		else
-		{
-			return;
+
+			if (CurrentEnemyType == EnemiesTypes.Ghost) {
+				AudioManager.instance.PlayFailSound ();
+			} else {
+				AudioManager.instance.PlaySquashSound ();
+			}
 		}
 	}
 
@@ -86,7 +99,7 @@ public class Enemy : MonoBehaviour
 		System.Random prng = new System.Random ();
 		int enemyTypeRange = prng.Next(0, 100);
 
-		Debug.Log (string.Format("<color=cyan>Chance: {0}</color>", enemyTypeRange));
+		//Debug.Log (string.Format("<color=cyan>Chance: {0}</color>", enemyTypeRange));
 
 		if(enemyTypeRange > 90f && enemyTypeRange < 100f)
 		{
@@ -140,26 +153,39 @@ public class Enemy : MonoBehaviour
 
 	void OnBecameInvisible()
 	{
-		if(CurrentEnemyType == EnemiesTypes.Ghost)
-		{
-			if(Clicked)
-			{
-				Debug.Log("You clicker wrong guy!");
+		if (CurrentEnemyType == EnemiesTypes.Ghost) {
+			if (clicked) {
+				LevelsManager.Instance.userProgress.ghostStoped++;
+				GameStatesManager.Instance.GoToLoseState();
+			} else if(explosed) {
+				#if UNITY_EDITOR
+				Debug.Log (string.Format ("<color=orange>{0} was killed by Bomb!</color>", gameObject.name));
+				#endif
+				LevelsManager.Instance.userProgress.ghostExploded++;
 				GameStatesManager.Instance.GoToLoseState();
 			}
-			else
-			{
-				gameObject.SetActive(false);
-			}
-		}
-		else
-		{
-			if (!Clicked && (GameStatesManager.Instance.currentGameState != GameStatesManager.Instance.levelLoseState && GameStatesManager.Instance.currentGameState != GameStatesManager.Instance.levelWonState)) {
+		} else {
+			if (!clicked && !explosed && !exit) {
 				Debug.Log ("You missed one life!");
+				LevelsManager.Instance.userProgress.pumpkinsPassed++;
 				GameStatesManager.Instance.AjustPlayerLives (-1);
+			} else if (clicked) {				
+				LevelsManager.Instance.userProgress.pumpkinsStoped++;
+			} else if (explosed) {
+				#if UNITY_EDITOR
+				Debug.Log (string.Format ("<color=orange>{0} was killed by Bomb!</color>", gameObject.name));
+				#endif
+				LevelsManager.Instance.userProgress.pumpkinsExploded++;
 			}
-
-			gameObject.SetActive (false);
 		}
+
+		KillEnemy ();
+	}
+
+	protected void KillEnemy() {
+		if (OnDeath != null) {
+			OnDeath();
+		}
+		gameObject.SetActive (false);
 	}
 }

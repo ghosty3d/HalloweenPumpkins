@@ -33,15 +33,6 @@ public static class ConfigManager
         }
     }
 
-    /// <summary>
-    /// Creates the initial config if it wasn't found.
-    /// </summary>
-    /// <param name="levelStorage">Level storage.</param>
-    public static void CreateInitialConfig(LevelStorage levelStorage)
-	{
-		//SaveLevelStorage(levelStorage);
-	}
-
     public static LevelStorage GetLevelStorage()
     {
         LevelStorage l_LevelStorage;
@@ -49,7 +40,6 @@ public static class ConfigManager
 
         if (l_LevelStorage == null)
         {
-            CreateInitialConfig(LevelsManager.Instance.levelStorage);
             l_LevelStorage = Serializer.Deserialize<LevelStorage>(ConfigPath);
         }
 
@@ -59,25 +49,25 @@ public static class ConfigManager
     public static void SaveLevelStorage(LevelStorage levelStorage)
     {
         Serializer.Serialize(levelStorage, ConfigPath);
-#if UNITY_EDITOR
+		#if UNITY_EDITOR
         UnityEditor.AssetDatabase.Refresh();
-#endif
+		#endif
     }
 
-    public static Dictionary<int,int> GetUserProgress()
-    {
-        Dictionary<int, int> _userProgress;
-        _userProgress = Serializer.Deserialize<Dictionary<int,int>>(UserConfigPath);
+	public static UserProgress GetUserProgress()
+	{
+		UserProgress _userProgress;
+		_userProgress = Serializer.Deserialize<UserProgress>(UserConfigPath);
 
-        if (_userProgress == null)
-        {
-            _userProgress = new Dictionary<int, int>();
-        }
+		if (_userProgress == null)
+		{
+			_userProgress = new UserProgress();
+		}
 
-        return _userProgress;
-    }
+		return _userProgress;
+	}
 
-    public static void SaveUserProgress(Dictionary<int,int> userProgress)
+	public static void SaveUserProgress(UserProgress userProgress)
     {
         Serializer.Serialize(userProgress, UserConfigPath);
     }

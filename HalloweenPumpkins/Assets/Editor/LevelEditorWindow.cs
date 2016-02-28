@@ -80,8 +80,23 @@ public class LevelEditorWindow : EditorWindow
 				selectedLevelId = levelStorage.LevelsCount;
 			}
 
-			newLevel = new Level(selectedLevelId, 10, 1, 1, 3, false, 0);
+			newLevel = new Level(selectedLevelId, 10, 1, 1, 3, 100, 200, false, 0);
 			levelStorage.AddNewLevel (newLevel);
+		}
+
+		if (GUILayout.Button("Recalculate Eneies Waves in Level", GUILayout.ExpandWidth(true), GUILayout.Height(32)))
+		{
+			for (int i = 0; i < levelStorage.LevelsCount; i++) {
+				levelStorage.levelsList [i].CreateEnemiesWaves (
+					levelStorage.levelsList [i].WavesCount,
+					levelStorage.levelsList [i].MinEnemyCount,
+					levelStorage.levelsList [i].MaxEnemyCount,
+					levelStorage.levelsList [i].timeBetwenEnemySpawnMin,
+					levelStorage.levelsList [i].timeBetwenEnemySpawnMax
+				);
+			}
+
+			GameObject.FindObjectOfType<LevelsManager> ().levelStorage = levelStorage;
 		}
 
 		if (GUILayout.Button("Delete Selected Level", GUILayout.ExpandWidth(true), GUILayout.Height(32)))
@@ -133,6 +148,8 @@ public class LevelEditorWindow : EditorWindow
             newLevel.WavesCount = EditorGUILayout.IntField(string.Format("Level WavesCount:\t\t"), newLevel.WavesCount);
             newLevel.MinEnemyCount = EditorGUILayout.IntField(string.Format("Level MinEnemyCount:\t"), newLevel.MinEnemyCount);
             newLevel.MaxEnemyCount = EditorGUILayout.IntField(string.Format("Level MaxEnemyCount:\t"), newLevel.MaxEnemyCount);
+			newLevel.timeBetwenEnemySpawnMin = EditorGUILayout.IntField(string.Format("Time Betwen Enemy Spawn Min:\t"), newLevel.timeBetwenEnemySpawnMin);
+			newLevel.timeBetwenEnemySpawnMax = EditorGUILayout.IntField(string.Format("Time Betwen Enemy Spawn Max:\t"), newLevel.timeBetwenEnemySpawnMax);
             newLevel.isLocked = EditorGUILayout.Toggle(string.Format("Level isLocked:\t\t"), newLevel.isLocked);
             newLevel.Stars = EditorGUILayout.IntField(string.Format("Level Stars:\t\t"), newLevel.Stars);
         }

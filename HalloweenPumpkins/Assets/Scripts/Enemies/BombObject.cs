@@ -33,7 +33,6 @@ public class BombObject : MonoBehaviour
 
 	public void Explose()
 	{
-		Debug.Log ("Explose");
 		DamageZone.enabled = true;
 		DamageZone.isTrigger = true;
 		DamageZone.radius = BombRadius;
@@ -48,7 +47,7 @@ public class BombObject : MonoBehaviour
 		Debug.Log ("OnTriggerEnter");
 		if(other.CompareTag("Enemy"))
 		{
-			other.gameObject.GetComponent<Enemy> ().Clicked = true;
+			other.gameObject.GetComponent<Enemy> ().explosed = true;
 			other.gameObject.SetActive (false);
 		}
 	}

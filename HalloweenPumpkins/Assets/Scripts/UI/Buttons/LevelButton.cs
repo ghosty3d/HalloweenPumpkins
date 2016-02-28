@@ -39,7 +39,7 @@ public class LevelButton : MonoBehaviour
     {
         //ID
         LevelID = _level.ID;
-        ButtonText.text = _level.ID.ToString();
+		ButtonText.text = (_level.ID + 1).ToString();
 
         //Locked
         if (_level.isLocked)
@@ -54,9 +54,9 @@ public class LevelButton : MonoBehaviour
         }
 
         //Stars
-        if (LevelsManager.Instance.userProgress.ContainsKey(LevelID))
+		if (LevelsManager.Instance.userProgress.passedLevels.ContainsKey(LevelID))
         {
-            for (int i = 0; i < LevelsManager.Instance.userProgress[LevelID]; i++)
+			for (int i = 0; i < LevelsManager.Instance.userProgress.passedLevels[LevelID]; i++)
             {
                 LevelStars[i].SetActive(true);
             }

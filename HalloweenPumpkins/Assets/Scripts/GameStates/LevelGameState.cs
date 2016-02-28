@@ -19,28 +19,20 @@ public class LevelGameState : IGameState
 		Debug.Log ("Now current state is :" + this.GetType());
 		#endif
 
-		if (!gameManager.GameViewUI.BombContainer.activeInHierarchy)
-		{
-			gameManager.GameViewUI.ShowBombContainer ();
-		}
-
-		if (!gameManager.GameViewUI.GameUIContainer.activeInHierarchy)
-		{
-			gameManager.GameViewUI.ShowGameUIContainer ();
-		}
+		gameManager.GameViewUI.ShowBombContainer ();
+		gameManager.GameViewUI.ShowGameUIContainer ();
 
 		BombManger.SetStartBombsCount (gameManager.PlayerBombsCount);
 
 		gameManager.GameViewUI.GetComponent<Canvas> ().worldCamera = Camera.main;
 		gameManager.GameViewUI.GetComponent<Canvas> ().renderMode = RenderMode.ScreenSpaceCamera;
 
-		gameManager.GameViewUI.UpdateEnemiesWaves (gameManager.levelManager.CurrentLevel.WavesCount);
-
 		gameManager.AjustPlayerLives (gameManager.PlayerLivesMax - gameManager.PlayerLives);
+		gameManager.enemiesSpawner.ResetEnemiesSpawner ();
+		gameManager.enemiesSpawner.InitializeEnemiesSpawner ();
 
-		gameManager.enemiesSpawner.SetEnemiesCount(gameManager.levelManager.CurrentLevel.MaxEnemyCount);
-		gameManager.enemiesSpawner.SetWavesCount(gameManager.levelManager.CurrentLevel.WavesCount);
-		gameManager.enemiesSpawner.StartSpawnEnemies ();
+		//Audio
+		AudioManager.instance.PlayGameMisuc();
 	}
 
 	public void UpdateState ()
@@ -50,16 +42,9 @@ public class LevelGameState : IGameState
 
 	public void DisableState ()
 	{
-		if (gameManager.GameViewUI.BombContainer.activeInHierarchy)
-		{
-			gameManager.GameViewUI.HideBombContainer ();
-		}
-
-		if (gameManager.GameViewUI.GameUIContainer.activeInHierarchy)
-		{
-			gameManager.GameViewUI.HideGameUIContainer ();
-		}
-
-		gameManager.enemiesSpawner.StopEnemiesAndHide ();
+		gameManager.GameViewUI.HideBombContainer ();
+		gameManager.GameViewUI.HideGameUIContainer ();
+		gameManager.GameViewUI.HidePauseContainer ();
+		gameManager.enemiesSpawner.ResetEnemiesSpawner ();
 	}
 }

@@ -19,10 +19,9 @@ public class LevelLoseState : IGameState
 		Debug.Log ("Now current state is :" + this.GetType());
 		#endif
 
-		if(!gameManager.GameViewUI.EndLevelContainer.activeInHierarchy)
-		{
-			gameManager.GameViewUI.ShowEndLevelContainer (false);
-		}
+		gameManager.GameViewUI.ShowEndLevelContainer (false);
+
+		ConfigManager.SaveUserProgress (LevelsManager.Instance.userProgress);
 	}
 
 	public void UpdateState ()
@@ -32,11 +31,6 @@ public class LevelLoseState : IGameState
 
 	public void DisableState ()
 	{
-		if(gameManager.GameViewUI.EndLevelContainer.activeInHierarchy)
-		{
-			gameManager.GameViewUI.HideEndLevelContainer ();
-		}
-
-		gameManager.enemiesSpawner.StopEnemiesAndHide ();
+		gameManager.GameViewUI.HideEndLevelContainer ();
 	}
 }

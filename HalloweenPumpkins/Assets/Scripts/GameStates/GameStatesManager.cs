@@ -27,8 +27,6 @@ public class GameStatesManager : MonoBehaviour
 	public LevelWonState levelWonState;
 	public ExitGameState levelExitState;
 
-	public PauseState pauseState;
-
 	public bool InPause;
 
 	public int PlayerLivesMax = 3;
@@ -49,11 +47,6 @@ public class GameStatesManager : MonoBehaviour
 		levelWonState = new LevelWonState(this);
 		levelExitState = new ExitGameState(this);
 
-		pauseState = new PauseState(this);
-
-		currentGameState = mainMenuState;
-		currentGameState.EnableState ();
-
 		if (!levelManager)
 		{
 			levelManager = LevelsManager.Instance;
@@ -63,7 +56,7 @@ public class GameStatesManager : MonoBehaviour
 	void Start ()
 	{
 		enemiesSpawner = EnemiesSpawner.Instance;
-		//GoToMainMenu();
+		GoToMainMenu();
 	}
 
 	void Update()
@@ -108,16 +101,16 @@ public class GameStatesManager : MonoBehaviour
 
 		//Update Model Data
 		levelManager.CurrentLevel.Stars = rank;
-        if (LevelsManager.Instance.userProgress.ContainsKey(levelManager.CurrentLevel.ID))
+		if (LevelsManager.Instance.userProgress.passedLevels.ContainsKey(levelManager.CurrentLevel.ID))
         {
-            if (LevelsManager.Instance.userProgress[levelManager.CurrentLevel.ID] < levelManager.CurrentLevel.Stars)
+			if (LevelsManager.Instance.userProgress.passedLevels[levelManager.CurrentLevel.ID] < levelManager.CurrentLevel.Stars)
             {
-                LevelsManager.Instance.userProgress[levelManager.CurrentLevel.ID] = levelManager.CurrentLevel.Stars;
+				LevelsManager.Instance.userProgress.passedLevels[levelManager.CurrentLevel.ID] = levelManager.CurrentLevel.Stars;
             }
         }
         else
         {
-            LevelsManager.Instance.userProgress.Add(levelManager.CurrentLevel.ID, levelManager.CurrentLevel.Stars);
+			LevelsManager.Instance.userProgress.passedLevels.Add(levelManager.CurrentLevel.ID, levelManager.CurrentLevel.Stars);
         }
 
         ConfigManager.SaveUserProgress(LevelsManager.Instance.userProgress);
@@ -125,11 +118,9 @@ public class GameStatesManager : MonoBehaviour
 
 	public void GoToMainMenu()
 	{
-       // ConfigManager.SaveLevelStorage(LevelsManager.Instance.levelStorage);
-        levelLoseState.DisableState ();
-		levelWonState.DisableState ();
-		pauseState.DisableState ();
-		levelGameState.DisableState ();
+		if (currentGameState != null) {
+			currentGameState.DisableState ();
+		}
 
 		currentGameState = mainMenuState;
 		currentGameState.EnableState();
@@ -154,16 +145,43 @@ public class GameStatesManager : MonoBehaviour
 
 	public void GoToPause()
 	{
-		currentGameState = pauseState;
-		currentGameState.EnableState();
+		Time.timeScale = 0f;
+		GameUI.Instance.ShowPauseContainer ();
+
+		for (int i = 0; i < EnemiesSpawner.Instance.enemiesList.Count; i++) {
+			EnemiesSpawner.Instance.enemiesList [i].GetComponent<Enemy> ().shouldStop = true;
+		}
 	}
 
 	public void GoToResumeGame()
 	{
-		pauseState.DisableState ();
+		Time.timeScale = 1f;
+		GameUI.Instance.HidePauseContainer ();
 
-		currentGameState = levelGameState;
-		currentGameState.EnableState();
+		for (int i = 0; i < EnemiesSpawner.Instance.enemiesList.Count; i++) {
+			EnemiesSpawner.Instance.enemiesList [i].GetComponent<Enemy> ().shouldStop = false;
+		}
+	}
+
+	public void GoToMainMenuFromPause() {
+
+		if (EnemiesSpawner.Instance.enemiesList != null && EnemiesSpawner.Instance.enemiesList.Count > 0) {
+			for (int i = 0; i < EnemiesSpawner.Instance.enemiesList.Count; i++) {
+				EnemiesSpawner.Instance.enemiesList [i].GetComponent<Enemy> ().exit = true;
+			}
+		}
+
+		if (Time.timeScale < 1f) {
+			Time.timeScale = 1f;
+		}
+
+		for (int i = 0; i < EnemiesSpawner.Instance.enemiesList.Count; i++) {
+			EnemiesSpawner.Instance.enemiesList [i].GetComponent<Enemy> ().shouldStop = false;
+		}
+
+		currentGameState.DisableState ();
+		currentGameState = mainMenuState;
+		currentGameState.EnableState ();
 	}
 
 	public void GoToExit()
@@ -174,12 +192,14 @@ public class GameStatesManager : MonoBehaviour
 
 	public void GoToLoseState()
 	{
+		currentGameState.DisableState ();
 		currentGameState = levelLoseState;
 		currentGameState.EnableState();
 	}
 
 	public void GoToWonState()
 	{
+		currentGameState.DisableState ();
 		currentGameState = levelWonState;
 		currentGameState.EnableState();
 	}

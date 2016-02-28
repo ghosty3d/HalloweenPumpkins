@@ -2,14 +2,9 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class RulesPanelUI : MonoBehaviour
+public class RulesPanelUI : StateUI
 {
 	public Text TitleText;
 	public ScrollRect RulesScroll;
 	public Button CloseButton;
-
-	void Start ()
-	{
-		
-	}
 }

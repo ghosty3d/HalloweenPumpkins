@@ -23,6 +23,10 @@ public static class BombManger
 		{
 			BombsCount -= bombs;
 			GameStatesManager.Instance.GameViewUI.UpdateBombsCount (BombsCount);
+
+			//if it was used bomb set it in User's Progress
+			LevelsManager.Instance.userProgress.bombsUsed++;
+			ConfigManager.SaveUserProgress (LevelsManager.Instance.userProgress);
 		}
 		else
 		{
