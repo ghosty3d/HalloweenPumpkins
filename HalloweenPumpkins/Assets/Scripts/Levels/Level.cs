@@ -19,9 +19,11 @@ public class Level
 
 	public int Stars;
 
+	public float speedEnemiesMultiplier;
+
 	public List<LevelEnemiesWave> WavesList;
 
-	public Level(int id, int levelTime, int wavesCount, int minEnemyCount, int maxEnemyCount, int a_timeBetwenEnemySpawnMin, int a_timeBetwenEnemySpawnMax, bool locked, int stars)
+	public Level(int id, int levelTime, int wavesCount, int minEnemyCount, int maxEnemyCount, int a_timeBetwenEnemySpawnMin, int a_timeBetwenEnemySpawnMax, bool locked, int stars, float a_SpeedEnemiesMultiplier)
 	{
 		ID = id;
 		WavesCount = wavesCount;
@@ -31,6 +33,7 @@ public class Level
 		timeBetwenEnemySpawnMax = a_timeBetwenEnemySpawnMax;
 		isLocked = locked;
 		Stars = stars;
+		speedEnemiesMultiplier = a_SpeedEnemiesMultiplier;
 		CreateEnemiesWaves (wavesCount, minEnemyCount, maxEnemyCount, a_timeBetwenEnemySpawnMin, a_timeBetwenEnemySpawnMax);
 	}
 

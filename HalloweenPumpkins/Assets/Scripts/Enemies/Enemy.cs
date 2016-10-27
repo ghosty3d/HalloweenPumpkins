@@ -23,14 +23,17 @@ public class Enemy : MonoBehaviour
 
 	public float spawnedPosX = 0;
 
-	private float amplitudeX = 0.02f;
-	private float frequency = 2.5f;
+	private float amplitudeX = 0.03f;
+	private float frequency = 2f;
 	public float fallingSpeed;
 
 	private float xMovementPosition;
 	private float yMovementPosition;
 
 	public float UntouchableChanse;
+
+	private int minEnemySpeed = 200;
+	private int maxEnemySpeed = 400;
 
 	public Color EnemyColor;
 	public List<EnemyData> EnemiesVisualList = new List<EnemyData>();
@@ -56,7 +59,7 @@ public class Enemy : MonoBehaviour
 		System.Random prng = new System.Random ();
 
 		prng = new System.Random ();
-		fallingSpeed = prng.Next (150, 300) * 0.01f;
+		fallingSpeed = prng.Next (minEnemySpeed, maxEnemySpeed) * 0.01f * LevelsManager.Instance.CurrentLevel.speedEnemiesMultiplier;
 
 		prng = new System.Random ();
 		spawnedPosX = prng.Next (-150, 150) * 0.01f;

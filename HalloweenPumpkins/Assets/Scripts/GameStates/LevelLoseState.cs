@@ -22,6 +22,12 @@ public class LevelLoseState : IGameState
 		gameManager.GameViewUI.ShowEndLevelContainer (false);
 
 		ConfigManager.SaveUserProgress (LevelsManager.Instance.userProgress);
+
+		if(LevelsManager.Instance.CurrentLevel.Stars != 0) {
+			LevelsManager.Instance.CurrentLevel.Stars = 0;
+
+			GameUI.Instance.HideStars ();
+		}
 	}
 
 	public void UpdateState ()

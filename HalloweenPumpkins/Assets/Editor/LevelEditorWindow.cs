@@ -80,7 +80,7 @@ public class LevelEditorWindow : EditorWindow
 				selectedLevelId = levelStorage.LevelsCount;
 			}
 
-			newLevel = new Level(selectedLevelId, 10, 1, 1, 3, 100, 200, false, 0);
+			newLevel = new Level(selectedLevelId, 10, 1, 1, 3, 100, 200, false, 0, 1f);
 			levelStorage.AddNewLevel (newLevel);
 		}
 
@@ -152,6 +152,7 @@ public class LevelEditorWindow : EditorWindow
 			newLevel.timeBetwenEnemySpawnMax = EditorGUILayout.IntField(string.Format("Time Betwen Enemy Spawn Max:\t"), newLevel.timeBetwenEnemySpawnMax);
             newLevel.isLocked = EditorGUILayout.Toggle(string.Format("Level isLocked:\t\t"), newLevel.isLocked);
             newLevel.Stars = EditorGUILayout.IntField(string.Format("Level Stars:\t\t"), newLevel.Stars);
+			newLevel.speedEnemiesMultiplier = EditorGUILayout.FloatField(string.Format("Enemies Speed Muiltiplier:\t"), newLevel.speedEnemiesMultiplier);
         }
 
     }

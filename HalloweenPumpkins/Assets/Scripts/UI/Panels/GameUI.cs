@@ -152,6 +152,14 @@ public class GameUI : MonoBehaviour
 		}
 	}
 
+	public void HideStars()
+	{
+		for(int i = 0; i < LevelEndUI.Instance.Stars.Count; i++)
+		{
+			LevelEndUI.Instance.Stars [i].SetActive (false);
+		}
+	}
+
 	public void ExitGame()
 	{
 		Application.Quit ();
